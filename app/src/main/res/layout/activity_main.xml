@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_root" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/app_name"
+            android:textAppearance="?attr/textAppearanceHeadlineLarge" android:layout_marginTop="16dp" android:layout_marginBottom="8dp" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/intro"
+            android:textAppearance="?attr/textAppearanceBodyLarge" android:layout_marginBottom="24dp" />
+        <LinearLayout android:id="@+id/overview_panel" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/widget_background" app:strokeWidth="0dp" app:cardCornerRadius="24dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+                    <TextView android:id="@+id/battery_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="@string/battery_unavailable" android:textAppearance="?attr/textAppearanceTitleMedium" android:textColor="@color/widget_text" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/screen_off"
+                        android:layout_marginTop="20dp" android:textColor="@color/widget_muted" />
+                    <TextView android:id="@+id/estimate_off" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/learning"
+                        android:textAppearance="?attr/textAppearanceHeadlineLarge" android:textColor="@color/widget_text" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/screen_on"
+                        android:layout_marginTop="16dp" android:textColor="@color/widget_muted" />
+                    <TextView android:id="@+id/estimate_on" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/learning"
+                        android:textAppearance="?attr/textAppearanceHeadlineLarge" android:textColor="@color/widget_text" />
+                    <TextView android:id="@+id/estimate_detail" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="@string/learning_detail" android:layout_marginTop="16dp" android:textColor="@color/widget_muted" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <TextView android:id="@+id/collection_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/collection_paused" android:layout_marginTop="24dp" android:textAppearance="?attr/textAppearanceTitleMedium" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/collection_detail"
+                android:layout_marginTop="8dp" android:layout_marginBottom="8dp" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/toggle_learning" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/start_learning" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/add_widget" style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/add_widget" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/data_title"
+                android:layout_marginTop="24dp" android:textAppearance="?attr/textAppearanceTitleLarge" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/data_detail"
+                android:layout_marginTop="8dp" android:layout_marginBottom="8dp" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/export_data" style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/export_data" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/import_data" style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/import_data" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/open_dev" style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/developer_page" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/dev_panel" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+            <com.google.android.material.button.MaterialButton android:id="@+id/close_dev" style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/back_overview" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/developer_page" android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/dev_explanation" android:layout_marginTop="12dp" android:layout_marginBottom="16dp" />
+            <TextView android:id="@+id/dev_summary" android:layout_width="match_parent" android:layout_height="wrap_content" android:textIsSelectable="true" />
+            <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp">
+                <TextView android:id="@+id/dev_bands" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="monospace" android:textIsSelectable="true" android:textSize="12sp" />
+            </HorizontalScrollView>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/recent_intervals"
+                android:layout_marginTop="24dp" android:textAppearance="?attr/textAppearanceTitleMedium" />
+            <TextView android:id="@+id/dev_raw" android:layout_width="match_parent" android:layout_height="wrap_content" android:textIsSelectable="true" android:layout_marginTop="12dp" />
+        </LinearLayout>
+        <ProgressBar android:id="@+id/progress" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:indeterminate="true" android:visibility="gone" android:layout_marginTop="8dp" />
+    </LinearLayout>
+</ScrollView>

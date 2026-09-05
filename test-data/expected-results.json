@@ -1,0 +1,1450 @@
+{
+  "generatedAtMs": 1788594379095,
+  "generatedAtUtc": "2026-09-05T07:46:19.095Z",
+  "validScenarios": [
+    {
+      "file": "01-realistic-six-weeks.json",
+      "description": "Start here: six weeks of varying use, different discharge speeds across battery levels, and discarded mixed\/audio intervals.",
+      "rawIntervalsBeforeImport": 565,
+      "rawIntervalsAfterImport": 565,
+      "summaryRowsBeforeImport": 707,
+      "summaryRowsAfterImport": 707,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1400,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1428,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1400,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1428,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": 655,
+            "display": "11 min",
+            "samples": 1400,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 125,
+            "display": "2 min",
+            "samples": 1428,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": 7112,
+            "display": "1 h 59 min",
+            "samples": 1400,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 1312,
+            "display": "22 min",
+            "samples": 1428,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": 38092,
+            "display": "10 h 35 min",
+            "samples": 1400,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 5782,
+            "display": "1 h 36 min",
+            "samples": 1428,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": 81440,
+            "display": "22 h 37 min",
+            "samples": 1400,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 11271,
+            "display": "3 h 8 min",
+            "samples": 1428,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": 99976,
+            "display": "1 d 3 h",
+            "samples": 1400,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 14077,
+            "display": "3 h 55 min",
+            "samples": 1428,
+            "days": 42,
+            "coverage": 1,
+            "established": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "02-constant-rates.json",
+      "description": "Analytic reference: screen off is 600 seconds per percent; screen on is 120 seconds per percent. Both modes have full coverage.",
+      "rawIntervalsBeforeImport": 1157,
+      "rawIntervalsAfterImport": 1157,
+      "summaryRowsBeforeImport": 476,
+      "summaryRowsAfterImport": 476,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": 600,
+            "display": "10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 120,
+            "display": "2 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": 6000,
+            "display": "1 h 40 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 1200,
+            "display": "20 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": 21000,
+            "display": "5 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 4200,
+            "display": "1 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": 39000,
+            "display": "10 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 7800,
+            "display": "2 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": 51000,
+            "display": "14 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 10200,
+            "display": "2 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "03-recent-usage-change.json",
+      "description": "The latest 14 days shorten the time per percent from 600 to 300 seconds off and 300 to 120 seconds on, representing faster battery drain. The older 14-day block has half the recent block's weight. Expected weighted rates: 400 seconds off, 180 seconds on.",
+      "rawIntervalsBeforeImport": 1116,
+      "rawIntervalsAfterImport": 1116,
+      "summaryRowsBeforeImport": 952,
+      "summaryRowsAfterImport": 952,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": 400,
+            "display": "7 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 180,
+            "display": "3 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": 4000,
+            "display": "1 h 7 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 1800,
+            "display": "30 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": 14000,
+            "display": "3 h 53 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 6300,
+            "display": "1 h 45 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": 26000,
+            "display": "7 h 13 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 11700,
+            "display": "3 h 15 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": 34000,
+            "display": "9 h 27 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 15300,
+            "display": "4 h 15 min",
+            "samples": 2352,
+            "days": 28,
+            "coverage": 1,
+            "established": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "04-five-samples-per-mode.json",
+      "description": "Only five accepted drops per mode. Both values stay Learning above 15%, regardless of the observed rates.",
+      "rawIntervalsBeforeImport": 13,
+      "rawIntervalsAfterImport": 13,
+      "summaryRowsBeforeImport": 2,
+      "summaryRowsAfterImport": 2,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 5,
+            "days": 1,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 5,
+            "days": 1,
+            "coverage": 1,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 5,
+            "days": 1,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 5,
+            "days": 1,
+            "coverage": 1,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 5,
+            "days": 1,
+            "coverage": 0,
+            "established": false
+          }
+        }
+      ]
+    },
+    {
+      "file": "05-screen-on-only.json",
+      "description": "Seven days of screen-on history. Screen on has a numeric estimate; screen off stays Learning above 15%.",
+      "rawIntervalsBeforeImport": 510,
+      "rawIntervalsAfterImport": 510,
+      "summaryRowsBeforeImport": 119,
+      "summaryRowsAfterImport": 119,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 588,
+            "days": 7,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 588,
+            "days": 7,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 120,
+            "display": "2 min",
+            "samples": 588,
+            "days": 7,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 1200,
+            "display": "20 min",
+            "samples": 588,
+            "days": 7,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 4200,
+            "display": "1 h 10 min",
+            "samples": 588,
+            "days": 7,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 7800,
+            "display": "2 h 10 min",
+            "samples": 588,
+            "days": 7,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 10200,
+            "display": "2 h 50 min",
+            "samples": 588,
+            "days": 7,
+            "coverage": 1,
+            "established": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "06-excluded-audio-and-other-intervals.json",
+      "description": "Same summaries as 02, with extra excluded screen-off audio, charging, mixed-state, unknown-audio, level-jump, warmup, duration and clock-change intervals. All estimates must match 02 exactly.",
+      "rawIntervalsBeforeImport": 1311,
+      "rawIntervalsAfterImport": 1311,
+      "summaryRowsBeforeImport": 476,
+      "summaryRowsAfterImport": 476,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": 600,
+            "display": "10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 120,
+            "display": "2 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": 6000,
+            "display": "1 h 40 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 1200,
+            "display": "20 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": 21000,
+            "display": "5 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 4200,
+            "display": "1 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": 39000,
+            "display": "10 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 7800,
+            "display": "2 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": 51000,
+            "display": "14 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 10200,
+            "display": "2 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "07-raw-expired-summaries-retained.json",
+      "description": "A backup exported ten days ago. Its raw intervals disappear on import; all 14 summary days remain, with the same constant-rate estimates as 02.",
+      "rawIntervalsBeforeImport": 1157,
+      "rawIntervalsAfterImport": 0,
+      "summaryRowsBeforeImport": 476,
+      "summaryRowsAfterImport": 476,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": 600,
+            "display": "10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 120,
+            "display": "2 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": 6000,
+            "display": "1 h 40 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 1200,
+            "display": "20 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": 21000,
+            "display": "5 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 4200,
+            "display": "1 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": 39000,
+            "display": "10 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 7800,
+            "display": "2 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": 51000,
+            "display": "14 h 10 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          },
+          "ON": {
+            "secondsToTarget": 10200,
+            "display": "2 h 50 min",
+            "samples": 1176,
+            "days": 14,
+            "coverage": 1,
+            "established": true
+          }
+        }
+      ]
+    },
+    {
+      "file": "08-summary-retention-boundary.json",
+      "description": "A backup exported 52 days ago. Only summary ages 53, 54 and 55 days survive: 252 samples per mode across three days. Raw history is empty; estimates are provisional with zero well-sampled band coverage.",
+      "rawIntervalsBeforeImport": 1157,
+      "rawIntervalsAfterImport": 0,
+      "summaryRowsBeforeImport": 238,
+      "summaryRowsAfterImport": 102,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 1,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 1,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": 600,
+            "display": "10 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 120,
+            "display": "2 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": 6000,
+            "display": "1 h 40 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 1200,
+            "display": "20 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": 21000,
+            "display": "5 h 50 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 4200,
+            "display": "1 h 10 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": 39000,
+            "display": "10 h 50 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 7800,
+            "display": "2 h 10 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": 51000,
+            "display": "14 h 10 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 10200,
+            "display": "2 h 50 min",
+            "samples": 252,
+            "days": 3,
+            "coverage": 0,
+            "established": false
+          }
+        }
+      ]
+    },
+    {
+      "file": "09-entire-backup-expired.json",
+      "description": "A backup exported 60 days ago. All raw intervals and summaries expire on import. Both modes return to Learning above 15%.",
+      "rawIntervalsBeforeImport": 1157,
+      "rawIntervalsAfterImport": 0,
+      "summaryRowsBeforeImport": 476,
+      "summaryRowsAfterImport": 0,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        }
+      ]
+    },
+    {
+      "file": "10-empty-history.json",
+      "description": "An empty valid backup. Use it to check the initial Learning state and empty developer page.",
+      "rawIntervalsBeforeImport": 0,
+      "rawIntervalsAfterImport": 0,
+      "summaryRowsBeforeImport": 0,
+      "summaryRowsAfterImport": 0,
+      "expectedAtGeneration": [
+        {
+          "batteryPercent": 0,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 15,
+          "OFF": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": 0,
+            "display": "0 min",
+            "samples": 0,
+            "days": 0,
+            "coverage": 1,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 16,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 25,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 50,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 80,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        },
+        {
+          "batteryPercent": 100,
+          "OFF": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          },
+          "ON": {
+            "secondsToTarget": null,
+            "display": "Learning",
+            "samples": 0,
+            "days": 0,
+            "coverage": 0,
+            "established": false
+          }
+        }
+      ]
+    }
+  ],
+  "invalidScenarios": [
+    {
+      "file": "invalid-unsupported-version.json",
+      "expectedError": "Unsupported backup format or version."
+    },
+    {
+      "file": "invalid-duplicate-summary.json",
+      "expectedError": "Duplicate daily summary."
+    },
+    {
+      "file": "invalid-overlapping-intervals.json",
+      "expectedError": "Overlapping raw intervals."
+    }
+  ]
+}

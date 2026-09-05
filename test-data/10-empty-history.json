@@ -1,0 +1,233 @@
+{
+  "format": "battery-time-widget",
+  "version": 1,
+  "exportedAtMs": 1788594379095,
+  "batteryPercent": 80,
+  "targetPercent": 15,
+  "bandWidth": 5,
+  "rawRetentionDays": 7,
+  "summaryRetentionDays": 56,
+  "halfLifeDays": 14,
+  "estimates": {
+    "OFF": {
+      "secondsToTarget": null,
+      "coverage": 0,
+      "samples": 0,
+      "days": 0,
+      "bands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        }
+      ]
+    },
+    "ON": {
+      "secondsToTarget": null,
+      "coverage": 0,
+      "samples": 0,
+      "days": 0,
+      "bands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        }
+      ]
+    }
+  },
+  "dailySummaries": [],
+  "rawIntervals": [],
+  "syntheticTestData": true,
+  "testScenario": "An empty valid backup. Use it to check the initial Learning state and empty developer page."
+}
