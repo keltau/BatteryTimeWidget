@@ -13,14 +13,20 @@
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
                     <TextView android:id="@+id/battery_status" android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:text="@string/battery_unavailable" android:textAppearance="?attr/textAppearanceTitleMedium" android:textColor="@color/widget_text" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/combined_estimate"
+                        android:layout_marginTop="8dp" android:textColor="@color/widget_muted" />
                     <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/screen_off"
                         android:layout_marginTop="20dp" android:textColor="@color/widget_muted" />
                     <TextView android:id="@+id/estimate_off" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/learning"
                         android:textAppearance="?attr/textAppearanceHeadlineLarge" android:textColor="@color/widget_text" />
+                    <TextView android:id="@+id/models_off" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" android:textColor="@color/widget_muted" />
                     <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/screen_on"
                         android:layout_marginTop="16dp" android:textColor="@color/widget_muted" />
                     <TextView android:id="@+id/estimate_on" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/learning"
                         android:textAppearance="?attr/textAppearanceHeadlineLarge" android:textColor="@color/widget_text" />
+                    <TextView android:id="@+id/models_on" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" android:textColor="@color/widget_muted" />
                     <TextView android:id="@+id/estimate_detail" android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:text="@string/learning_detail" android:layout_marginTop="16dp" android:textColor="@color/widget_muted" />
                 </LinearLayout>
@@ -47,14 +53,14 @@
             <com.google.android.material.button.MaterialButton android:id="@+id/close_dev" style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/back_overview" />
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/developer_page" android:textAppearance="?attr/textAppearanceHeadlineSmall" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/dev_explanation" android:layout_marginTop="12dp" android:layout_marginBottom="16dp" />
-            <TextView android:id="@+id/dev_summary" android:layout_width="match_parent" android:layout_height="wrap_content" android:textIsSelectable="true" />
+            <TextView android:id="@+id/dev_summary" android:layout_width="match_parent" android:layout_height="wrap_content" android:textIsSelectable="true" android:layout_marginTop="16dp" />
             <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp">
                 <TextView android:id="@+id/dev_bands" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="monospace" android:textIsSelectable="true" android:textSize="12sp" />
             </HorizontalScrollView>
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/recent_intervals"
                 android:layout_marginTop="24dp" android:textAppearance="?attr/textAppearanceTitleMedium" />
             <TextView android:id="@+id/dev_raw" android:layout_width="match_parent" android:layout_height="wrap_content" android:textIsSelectable="true" android:layout_marginTop="12dp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/dev_explanation" android:layout_marginTop="24dp" android:layout_marginBottom="16dp" />
         </LinearLayout>
         <ProgressBar android:id="@+id/progress" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:indeterminate="true" android:visibility="gone" android:layout_marginTop="8dp" />

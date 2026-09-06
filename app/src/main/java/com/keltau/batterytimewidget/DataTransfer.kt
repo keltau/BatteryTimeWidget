@@ -9,14 +9,33 @@ import kotlin.math.abs
 
 object DataTransfer {
     private const val FORMAT = "battery-time-widget"
-    private const val VERSION = 1
+    private const val VERSION = 2
 
     fun write(output: OutputStream, snapshot: BatteryStore.Snapshot, percent: Int, nowMs: Long) {
         val estimates = JSONObject()
         ScreenMode.entries.forEach { screen ->
-            val estimate = BatteryEstimator.estimate(percent, screen, snapshot.summaries, nowMs)
+            val hybrid = HybridEstimator.estimate(percent, screen, snapshot.summaries, snapshot.chargeSummaries, nowMs)
+            val estimate = hybrid.percentage
             estimates.put(screen.name, JSONObject().apply {
-                put("secondsToTarget", estimate.seconds ?: JSONObject.NULL)
+                put("secondsToTarget", hybrid.seconds ?: JSONObject.NULL)
+                put("percentageSeconds", estimate.seconds ?: JSONObject.NULL)
+                put("chargeSeconds", hybrid.charge.time.seconds ?: JSONObject.NULL)
+                put("percentageWeight", hybrid.percentageWeight)
+                put("chargeWeight", hybrid.chargeWeight)
+                put("percentageReliability", estimate.reliability)
+                put("chargeReliability", hybrid.charge.time.reliability)
+                put("chargeCoverage", hybrid.charge.time.coverage)
+                put("chargeSamples", hybrid.charge.time.sampleCount)
+                put("chargeDays", hybrid.charge.time.days)
+                put("chargeEquivalentPercent", hybrid.charge.equivalentPercent)
+                put("chargeObservedSeconds", hybrid.charge.observedSeconds)
+                put("chargeCapacityUah", hybrid.charge.capacityUah ?: JSONObject.NULL)
+                put("chargeBands", JSONArray().apply {
+                    hybrid.charge.time.bands.forEach { band -> put(JSONObject().apply {
+                        put("band", band.band); put("secondsPerPercent", band.secondsPerPercent)
+                        put("effectivePercent", band.effectiveSamples); put("days", band.days)
+                    }) }
+                })
                 put("coverage", estimate.coverage)
                 put("samples", estimate.sampleCount)
                 put("days", estimate.days)
@@ -41,6 +60,9 @@ object DataTransfer {
             put("rawRetentionDays", BatteryConfig.RAW_DAYS)
             put("summaryRetentionDays", BatteryConfig.HISTORY_DAYS)
             put("halfLifeDays", BatteryConfig.HALF_LIFE_DAYS)
+            put("chargeModel", "counter-rate-v1")
+            put("chargeDailySummaries", JSONArray().apply { snapshot.chargeSummaries.forEach { put(ChargeTransfer.json(it)) } })
+            put("chargeRawIntervals", JSONArray().apply { snapshot.chargeRaw.forEach { put(ChargeTransfer.json(it)) } })
             put("estimates", estimates)
             put("dailySummaries", JSONArray().apply {
                 snapshot.summaries.forEach { row ->
@@ -78,11 +100,12 @@ object DataTransfer {
             val size = input.read(buffer, 0, minOf(buffer.size, BatteryConfig.MAX_IMPORT_BYTES + 1 - content.size()))
             if (size < 0) break
             content.write(buffer, 0, size)
-            require(content.size() <= BatteryConfig.MAX_IMPORT_BYTES) { "The file exceeds 8 MB." }
+            require(content.size() <= BatteryConfig.MAX_IMPORT_BYTES) { "The file exceeds 32 MB." }
         }
         val bytes = content.toByteArray()
         val root = JSONObject(bytes.toString(Charsets.UTF_8))
-        require(root.getString("format") == FORMAT && root.integer("version") == VERSION.toLong()) { "Unsupported backup format or version." }
+        val version = root.integer("version")
+        require(root.getString("format") == FORMAT && version in 1..VERSION.toLong()) { "Unsupported backup format or version." }
         require(root.integer("targetPercent") == BatteryConfig.TARGET_PERCENT.toLong() && root.integer("bandWidth") == BatteryConfig.BAND_WIDTH.toLong()) { "The backup uses a different battery model." }
         val exportedAt = root.integer("exportedAtMs")
         require(exportedAt in 0..(nowMs + 300_000)) { "The backup date is in the future." }
@@ -135,9 +158,14 @@ object DataTransfer {
             require(group.size <= summary.count && group.sumOf { it.seconds } <= summary.seconds + 0.01) { "Raw data disagrees with daily summaries." }
         }
         val firstDay = Math.floorDiv(nowMs, BatteryConfig.DAY_MS) - BatteryConfig.HISTORY_DAYS + 1
+        val charge = if (version >= 2) {
+            require(root.getString("chargeModel") == "counter-rate-v1") { "Unsupported charge model." }
+            ChargeTransfer.read(root.getJSONArray("chargeDailySummaries"), root.getJSONArray("chargeRawIntervals"), exportedAt, nowMs)
+        } else emptyList<ChargeSummary>() to emptyList<ChargeInterval>()
         return BatteryStore.Snapshot(
             summaries.filter { it.day >= firstDay },
             raw.filter { it.endMs >= nowMs - BatteryConfig.RAW_DAYS * BatteryConfig.DAY_MS },
+            charge.first, charge.second,
         )
     }
 

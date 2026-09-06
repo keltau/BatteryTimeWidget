@@ -17,7 +17,8 @@ object BatteryConfig {
     const val MIN_INTERVAL_SECONDS = 20.0
     const val MAX_INTERVAL_SECONDS = 86_400.0
     const val MAX_RAW_ROWS = 20_000
-    const val MAX_IMPORT_BYTES = 8 * 1024 * 1024
+    const val MAX_CHARGE_RAW_ROWS = 10_000
+    const val MAX_IMPORT_BYTES = 32 * 1024 * 1024
     const val DAY_MS = 86_400_000L
 }
 
@@ -31,6 +32,11 @@ data class BatteryReading(
     val screen: ScreenMode,
     val audioActive: Boolean,
     val audioKnown: Boolean = true,
+    val chargeUah: Long? = null,
+    val currentUa: Int? = null,
+    val averageCurrentUa: Int? = null,
+    val voltageMv: Int? = null,
+    val temperatureDeciC: Int? = null,
 )
 
 enum class Exclusion {
@@ -133,6 +139,7 @@ data class TimeEstimate(
     val sampleCount: Int,
     val days: Int,
     val bands: List<BandEstimate>,
+    val reliability: Double = 0.0,
 ) {
     val established: Boolean get() = seconds != null && coverage >= 0.8 && days >= 7
 }
@@ -167,6 +174,15 @@ object BatteryEstimator {
         }
         val enough = count >= BatteryConfig.MIN_SAMPLES && totalWeight >= 3
         val seconds = if (enough) remaining.sumOf { bands[it / BatteryConfig.BAND_WIDTH].secondsPerPercent }.roundToLong() else null
-        return TimeEstimate(seconds, covered.toDouble() / max(1, remaining.count()), count, days, bands)
+        val coverage = covered.toDouble() / max(1, remaining.count())
+        val variance = if (totalWeight > 0) max(0.0, data.sumOf { it.squaredSeconds * weight(it) } / totalWeight - global * global) else 0.0
+        val consistency = if (global > 0) 1 / (1 + variance / (global * global)) else 0.0
+        val reliability = if (seconds == null) 0.0 else evidenceReliability(totalWeight, 6.0, coverage, days, consistency, totalWeight / count)
+        return TimeEstimate(seconds, coverage, count, days, bands, reliability)
     }
 }
+
+// Heuristic evidence scores, not probabilities or independent statistical confidence.
+internal fun evidenceReliability(evidence: Double, prior: Double, coverage: Double, days: Int, consistency: Double, freshness: Double): Double =
+    (evidence / (evidence + prior) * (0.35 + 0.65 * coverage) *
+        (0.6 + 0.4 * (days / 7.0).coerceAtMost(1.0)) * consistency * freshness).coerceIn(0.0, 1.0)

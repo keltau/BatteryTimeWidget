@@ -24,6 +24,7 @@ import androidx.core.content.edit
 
 class BatteryMonitorService : Service() {
     private val tracker = IntervalTracker()
+    private val chargeTracker = ChargeTracker()
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var audio: AudioManager
     private var audioAvailable = false
@@ -33,7 +34,10 @@ class BatteryMonitorService : Service() {
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action == Intent.ACTION_TIME_CHANGED) tracker.reset()
+            if (intent.action == Intent.ACTION_TIME_CHANGED) {
+                tracker.reset()
+                chargeTracker.reset()
+            }
             capture(if (intent.action == Intent.ACTION_BATTERY_CHANGED) intent else null)
         }
     }
@@ -103,6 +107,7 @@ class BatteryMonitorService : Service() {
         val currentGeneration = BatteryStore.generation
         if (generation != currentGeneration) {
             tracker.reset()
+            chargeTracker.reset()
             generation = currentGeneration
         }
         val sticky = batteryIntent ?: registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED)) ?: return
@@ -112,21 +117,27 @@ class BatteryMonitorService : Service() {
         val reading = BatteryReading(
             System.currentTimeMillis(), SystemClock.elapsedRealtime(), percent,
             isDischarging(sticky), screen, audioCheck.getOrDefault(false), audioAvailable && audioCheck.isSuccess,
+            chargeUah = property(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)?.toLong()?.takeIf { it > 0 },
+            currentUa = property(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW),
+            averageCurrentUa = property(BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE),
+            voltageMv = sticky.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1).takeIf { it > 0 },
+            temperatureDeciC = sticky.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, Int.MIN_VALUE).takeUnless { it == Int.MIN_VALUE },
         )
         latest = reading
         val interval = tracker.observe(reading)
+        val chargeInterval = chargeTracker.observe(reading)
         val changed = lastReading?.let {
             it.percent != reading.percent || it.discharging != reading.discharging || it.screen != reading.screen ||
                 it.audioActive != reading.audioActive || it.audioKnown != reading.audioKnown
         } ?: true
         val widgetChanged = lastReading?.let { it.percent != reading.percent || it.discharging != reading.discharging } ?: true
         lastReading = reading
-        if (interval != null || changed) {
+        if (interval != null || chargeInterval != null || changed) {
             BatteryStore.executor.execute {
                 runCatching {
-                    if (interval != null && currentGeneration == BatteryStore.generation) BatteryStore.get(this).record(interval, reading.timeMs)
+                    if (currentGeneration == BatteryStore.generation) BatteryStore.get(this).record(interval, chargeInterval, reading.timeMs)
                     failure = null
-                    if (interval != null || widgetChanged) BatteryWidgetProvider.updateAll(this)
+                    if (interval != null || (chargeInterval != null && chargeInterval.exclusion == null) || widgetChanged) BatteryWidgetProvider.updateAll(this)
                 }.onFailure {
                     failure = getString(R.string.storage_error)
                 }
@@ -135,12 +146,17 @@ class BatteryMonitorService : Service() {
         }
     }
 
+    private fun property(id: Int): Int? = runCatching {
+        getSystemService(BatteryManager::class.java).getIntProperty(id)
+    }.getOrNull()?.takeUnless { it == Int.MIN_VALUE }
+
     override fun onDestroy() {
         running = false
         latest = null
         if (registered) unregisterReceiver(receiver)
         if (audioAvailable) audio.unregisterAudioPlaybackCallback(playbackCallback)
         tracker.reset()
+        chargeTracker.reset()
         stopForeground(STOP_FOREGROUND_REMOVE)
         publishState(this)
         super.onDestroy()

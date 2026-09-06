@@ -50,8 +50,9 @@ class BatteryWidgetProvider : AppWidgetProvider() {
             val battery = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
             val percent = BatteryMonitorService.percent(battery)
             val summaries = BatteryStore.get(context).summaries(now)
-            val off = BatteryEstimator.estimate(percent, ScreenMode.OFF, summaries, now)
-            val on = BatteryEstimator.estimate(percent, ScreenMode.ON, summaries, now)
+            val chargeSummaries = BatteryStore.get(context).chargeSummaries(now)
+            val off = HybridEstimator.estimate(percent, ScreenMode.OFF, summaries, chargeSummaries, now)
+            val on = HybridEstimator.estimate(percent, ScreenMode.ON, summaries, chargeSummaries, now)
             val failure = BatteryMonitorService.failure
             val status = when {
                 failure != null -> failure
@@ -60,6 +61,7 @@ class BatteryWidgetProvider : AppWidgetProvider() {
                 !BatteryMonitorService.running -> context.getString(if (BatteryMonitorService.isEnabled(context)) R.string.widget_waiting else R.string.widget_paused)
                 battery != null && !BatteryMonitorService.isDischarging(battery) -> context.getString(R.string.unplugged_projection)
                 off.seconds == null || on.seconds == null -> context.getString(R.string.widget_learning)
+                off.percentage.seconds == null || on.percentage.seconds == null -> context.getString(R.string.widget_charge_learning)
                 !off.established || !on.established -> context.getString(R.string.provisional)
                 else -> context.getString(R.string.learned_estimate)
             }

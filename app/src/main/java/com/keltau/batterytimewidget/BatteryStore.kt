@@ -7,8 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import androidx.core.database.sqlite.transaction
 import java.util.concurrent.Executors
 
-class BatteryStore private constructor(context: Context) : SQLiteOpenHelper(context, "battery.db", null, 1) {
-    data class Snapshot(val summaries: List<DailySummary>, val raw: List<DischargeInterval>)
+class BatteryStore internal constructor(context: Context, name: String = "battery.db") : SQLiteOpenHelper(context, name, null, 2) {
+    data class Snapshot(val summaries: List<DailySummary>, val raw: List<DischargeInterval>,
+                        val chargeSummaries: List<ChargeSummary> = emptyList(), val chargeRaw: List<ChargeInterval> = emptyList())
 
     init {
         setWriteAheadLoggingEnabled(true)
@@ -30,17 +31,30 @@ class BatteryStore private constructor(context: Context) : SQLiteOpenHelper(cont
             )
         """.trimIndent())
         db.execSQL("CREATE INDEX raw_end ON raw(end_ms)")
+        createChargeTables(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        error("Unsupported database upgrade: $oldVersion to $newVersion")
+        if (oldVersion < 2) createChargeTables(db)
     }
 
-    fun record(interval: DischargeInterval, nowMs: Long) {
+    private fun createChargeTables(db: SQLiteDatabase) {
+        db.execSQL("""CREATE TABLE charge_daily (
+            day INTEGER NOT NULL, screen TEXT NOT NULL, band INTEGER NOT NULL, count INTEGER NOT NULL,
+            seconds REAL NOT NULL, charge_uah REAL NOT NULL, squared_rate_seconds REAL NOT NULL,
+            capacity_uah_seconds REAL NOT NULL, squared_capacity_seconds REAL NOT NULL,
+            PRIMARY KEY (day, screen, band))""")
+        db.execSQL("CREATE TABLE charge_raw (id INTEGER PRIMARY KEY, end_ms INTEGER NOT NULL, data TEXT NOT NULL)")
+        db.execSQL("CREATE INDEX charge_raw_end ON charge_raw(end_ms)")
+    }
+
+    fun record(interval: DischargeInterval, nowMs: Long) = record(interval, null, nowMs)
+
+    fun record(interval: DischargeInterval?, chargeInterval: ChargeInterval?, nowMs: Long) {
         val db = writableDatabase
         db.transaction {
-            insertRaw(db, interval)
-            if (interval.exclusion == null) {
+            if (interval != null) insertRaw(db, interval)
+            if (interval != null && interval.exclusion == null) {
                 val day = Math.floorDiv(interval.endMs, BatteryConfig.DAY_MS)
                 db.execSQL(
                     "INSERT OR IGNORE INTO daily VALUES (?, ?, ?, 0, 0, 0)",
@@ -50,6 +64,17 @@ class BatteryStore private constructor(context: Context) : SQLiteOpenHelper(cont
                     "UPDATE daily SET count = count + 1, seconds = seconds + ?, squared_seconds = squared_seconds + ? WHERE day = ? AND screen = ? AND band = ?",
                     arrayOf<Any>(interval.seconds, interval.seconds * interval.seconds, day, interval.screen.name, interval.band),
                 )
+            }
+            if (chargeInterval != null) {
+                insertChargeRaw(db, chargeInterval)
+                if (chargeInterval.exclusion == null) {
+                    val row = chargeInterval.summary()
+                    db.execSQL("INSERT OR IGNORE INTO charge_daily VALUES (?, ?, ?, 0, 0, 0, 0, 0, 0)", arrayOf<Any>(row.day, row.screen.name, row.band))
+                    db.execSQL("""UPDATE charge_daily SET count = count + 1, seconds = seconds + ?, charge_uah = charge_uah + ?,
+                        squared_rate_seconds = squared_rate_seconds + ?, capacity_uah_seconds = capacity_uah_seconds + ?,
+                        squared_capacity_seconds = squared_capacity_seconds + ? WHERE day = ? AND screen = ? AND band = ?""",
+                        arrayOf<Any>(row.seconds, row.chargeUah, row.squaredRateSeconds, row.capacityUahSeconds, row.squaredCapacitySeconds, row.day, row.screen.name, row.band))
+                }
             }
             prune(db, nowMs)
         }
@@ -70,7 +95,11 @@ class BatteryStore private constructor(context: Context) : SQLiteOpenHelper(cont
                     )
                 }
             }
-            Snapshot(summaries, raw)
+            val chargeRaw = mutableListOf<ChargeInterval>()
+            db.rawQuery("SELECT data FROM charge_raw ORDER BY end_ms, id", null).use { cursor ->
+                while (cursor.moveToNext()) chargeRaw += ChargeTransfer.interval(org.json.JSONObject(cursor.getString(0)))
+            }
+            Snapshot(summaries, raw, chargeSummaries(nowMs), chargeRaw)
         }
     }
 
@@ -79,6 +108,8 @@ class BatteryStore private constructor(context: Context) : SQLiteOpenHelper(cont
         db.transaction {
             db.delete("raw", null, null)
             db.delete("daily", null, null)
+            db.delete("charge_raw", null, null)
+            db.delete("charge_daily", null, null)
             snapshot.summaries.forEach { row ->
                 db.execSQL(
                     "INSERT INTO daily VALUES (?, ?, ?, ?, ?, ?)",
@@ -86,6 +117,11 @@ class BatteryStore private constructor(context: Context) : SQLiteOpenHelper(cont
                 )
             }
             snapshot.raw.forEach { insertRaw(db, it) }
+            snapshot.chargeSummaries.forEach { row ->
+                db.execSQL("INSERT INTO charge_daily VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    arrayOf<Any>(row.day, row.screen.name, row.band, row.count, row.seconds, row.chargeUah, row.squaredRateSeconds, row.capacityUahSeconds, row.squaredCapacitySeconds))
+            }
+            snapshot.chargeRaw.forEach { insertChargeRaw(db, it) }
             prune(db, nowMs)
         }
         generation++
@@ -113,6 +149,26 @@ class BatteryStore private constructor(context: Context) : SQLiteOpenHelper(cont
         val firstDay = Math.floorDiv(nowMs, BatteryConfig.DAY_MS) - BatteryConfig.HISTORY_DAYS + 1
         db.delete("daily", "day < ?", arrayOf(firstDay.toString()))
         db.execSQL("DELETE FROM raw WHERE id IN (SELECT id FROM raw ORDER BY end_ms DESC, id DESC LIMIT -1 OFFSET ${BatteryConfig.MAX_RAW_ROWS})")
+        db.delete("charge_raw", "end_ms < ?", arrayOf((nowMs - BatteryConfig.RAW_DAYS * BatteryConfig.DAY_MS).toString()))
+        db.delete("charge_daily", "day < ?", arrayOf(firstDay.toString()))
+        db.execSQL("DELETE FROM charge_raw WHERE id IN (SELECT id FROM charge_raw ORDER BY end_ms DESC, id DESC LIMIT -1 OFFSET ${BatteryConfig.MAX_CHARGE_RAW_ROWS})")
+    }
+
+    fun chargeSummaries(nowMs: Long): List<ChargeSummary> {
+        val today = Math.floorDiv(nowMs, BatteryConfig.DAY_MS)
+        val rows = mutableListOf<ChargeSummary>()
+        readableDatabase.rawQuery("SELECT day, screen, band, count, seconds, charge_uah, squared_rate_seconds, capacity_uah_seconds, squared_capacity_seconds FROM charge_daily WHERE day BETWEEN ? AND ? ORDER BY day, screen, band",
+            arrayOf((today - BatteryConfig.HISTORY_DAYS + 1).toString(), today.toString())).use { c ->
+            while (c.moveToNext()) rows += ChargeSummary(c.getLong(0), ScreenMode.valueOf(c.getString(1)), c.getInt(2), c.getInt(3), c.getDouble(4), c.getDouble(5), c.getDouble(6), c.getDouble(7), c.getDouble(8))
+        }
+        return rows
+    }
+
+    private fun insertChargeRaw(db: SQLiteDatabase, row: ChargeInterval) {
+        db.insertOrThrow("charge_raw", null, ContentValues().apply {
+            put("end_ms", row.end.timeMs)
+            put("data", ChargeTransfer.json(row).toString())
+        })
     }
 
     private fun insertRaw(db: SQLiteDatabase, row: DischargeInterval) {

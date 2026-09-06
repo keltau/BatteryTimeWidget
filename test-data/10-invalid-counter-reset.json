@@ -1,0 +1,808 @@
+{
+  "format": "battery-time-widget",
+  "version": 2,
+  "exportedAtMs": 1788639536805,
+  "batteryPercent": 80,
+  "targetPercent": 15,
+  "bandWidth": 5,
+  "rawRetentionDays": 7,
+  "summaryRetentionDays": 56,
+  "halfLifeDays": 14,
+  "chargeModel": "counter-rate-v1",
+  "chargeDailySummaries": [
+    {
+      "day": 20701,
+      "screen": "OFF",
+      "band": 10,
+      "count": 3,
+      "seconds": 180,
+      "chargeUah": 6000,
+      "squaredRateSeconds": 200000,
+      "capacityUahSeconds": 718920000,
+      "squaredCapacitySeconds": 2871368400000000
+    },
+    {
+      "day": 20701,
+      "screen": "ON",
+      "band": 10,
+      "count": 2,
+      "seconds": 120,
+      "chargeUah": 4000,
+      "squaredRateSeconds": 133333.33333333334,
+      "capacityUahSeconds": 479520000,
+      "squaredCapacitySeconds": 1916162400000000
+    }
+  ],
+  "chargeRawIntervals": [
+    {
+      "start": {
+        "timeMs": 1788638936805,
+        "elapsedMs": 1788638936805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "OFF",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 2000000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "end": {
+        "timeMs": 1788638996805,
+        "elapsedMs": 1788638996805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "OFF",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 2100000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "exclusion": null
+    },
+    {
+      "start": {
+        "timeMs": 1788638996805,
+        "elapsedMs": 1788638996805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "OFF",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 1998000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "end": {
+        "timeMs": 1788639056805,
+        "elapsedMs": 1788639056805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "OFF",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 1996000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "exclusion": null
+    },
+    {
+      "start": {
+        "timeMs": 1788639056805,
+        "elapsedMs": 1788639056805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "OFF",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 1996000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "end": {
+        "timeMs": 1788639116805,
+        "elapsedMs": 1788639116805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "ON",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 1994000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "exclusion": null
+    },
+    {
+      "start": {
+        "timeMs": 1788639116805,
+        "elapsedMs": 1788639116805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "ON",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 2000000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "end": {
+        "timeMs": 1788639176805,
+        "elapsedMs": 1788639176805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "ON",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 1998000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "exclusion": null
+    },
+    {
+      "start": {
+        "timeMs": 1788639176805,
+        "elapsedMs": 1788639176805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "ON",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 1998000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "end": {
+        "timeMs": 1788639236805,
+        "elapsedMs": 1788639236805,
+        "percent": 50,
+        "discharging": true,
+        "screen": "ON",
+        "audioActive": false,
+        "audioKnown": true,
+        "chargeUah": 1996000,
+        "currentUa": -120000,
+        "averageCurrentUa": null,
+        "voltageMv": 3900,
+        "temperatureDeciC": 270
+      },
+      "exclusion": null
+    }
+  ],
+  "estimates": {
+    "OFF": {
+      "secondsToTarget": 77883,
+      "percentageSeconds": null,
+      "chargeSeconds": 77883,
+      "percentageWeight": 0,
+      "chargeWeight": 1,
+      "percentageReliability": 0,
+      "chargeReliability": 0.007239365401973636,
+      "chargeCoverage": 0,
+      "chargeSamples": 3,
+      "chargeDays": 1,
+      "chargeEquivalentPercent": 0.15022533800701052,
+      "chargeObservedSeconds": 180,
+      "chargeCapacityUah": 3994000,
+      "chargeBands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0.15022533800701052,
+          "days": 1
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 1198.1999999999998,
+          "effectivePercent": 0,
+          "days": 0
+        }
+      ],
+      "coverage": 0,
+      "samples": 5,
+      "days": 1,
+      "bands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 5
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        }
+      ]
+    },
+    "ON": {
+      "secondsToTarget": 7800,
+      "percentageSeconds": 7800,
+      "chargeSeconds": null,
+      "percentageWeight": 1,
+      "chargeWeight": 0,
+      "percentageReliability": 0.11499999999999999,
+      "chargeReliability": 0,
+      "chargeCoverage": 0,
+      "chargeSamples": 2,
+      "chargeDays": 1,
+      "chargeEquivalentPercent": 0.10010010010010009,
+      "chargeObservedSeconds": 120,
+      "chargeCapacityUah": 3996000,
+      "chargeBands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0.10010010010010009,
+          "days": 1
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 1198.8,
+          "effectivePercent": 0,
+          "days": 0
+        }
+      ],
+      "coverage": 0,
+      "samples": 6,
+      "days": 1,
+      "bands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 1
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 5
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 120,
+          "effectiveSamples": 0
+        }
+      ]
+    }
+  },
+  "dailySummaries": [
+    {
+      "day": 20701,
+      "screen": "OFF",
+      "band": 10,
+      "count": 5,
+      "seconds": 600,
+      "squaredSeconds": 72000
+    },
+    {
+      "day": 20701,
+      "screen": "ON",
+      "band": 9,
+      "count": 1,
+      "seconds": 120,
+      "squaredSeconds": 14400
+    },
+    {
+      "day": 20701,
+      "screen": "ON",
+      "band": 10,
+      "count": 5,
+      "seconds": 600,
+      "squaredSeconds": 72000
+    }
+  ],
+  "rawIntervals": [
+    {
+      "startMs": 1788629536805,
+      "endMs": 1788629656805,
+      "startPercent": 55,
+      "endPercent": 54,
+      "seconds": 120,
+      "screen": "OFF",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788629656805,
+      "endMs": 1788629776805,
+      "startPercent": 54,
+      "endPercent": 53,
+      "seconds": 120,
+      "screen": "OFF",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788629776805,
+      "endMs": 1788629896805,
+      "startPercent": 53,
+      "endPercent": 52,
+      "seconds": 120,
+      "screen": "OFF",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788629896805,
+      "endMs": 1788630016805,
+      "startPercent": 52,
+      "endPercent": 51,
+      "seconds": 120,
+      "screen": "OFF",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788630016805,
+      "endMs": 1788630136805,
+      "startPercent": 51,
+      "endPercent": 50,
+      "seconds": 120,
+      "screen": "OFF",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788630136805,
+      "endMs": 1788630256805,
+      "startPercent": 55,
+      "endPercent": 54,
+      "seconds": 120,
+      "screen": "ON",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788630256805,
+      "endMs": 1788630376805,
+      "startPercent": 54,
+      "endPercent": 53,
+      "seconds": 120,
+      "screen": "ON",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788630376805,
+      "endMs": 1788630496805,
+      "startPercent": 53,
+      "endPercent": 52,
+      "seconds": 120,
+      "screen": "ON",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788630496805,
+      "endMs": 1788630616805,
+      "startPercent": 52,
+      "endPercent": 51,
+      "seconds": 120,
+      "screen": "ON",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788630616805,
+      "endMs": 1788630736805,
+      "startPercent": 51,
+      "endPercent": 50,
+      "seconds": 120,
+      "screen": "ON",
+      "exclusion": null
+    },
+    {
+      "startMs": 1788630736805,
+      "endMs": 1788630856805,
+      "startPercent": 50,
+      "endPercent": 49,
+      "seconds": 120,
+      "screen": "ON",
+      "exclusion": null
+    }
+  ],
+  "syntheticTestData": true,
+  "testScenario": "Off: five percentage drops are insufficient, but three sub-percent counter windows are ready. On: six percentage drops are ready, but two counter windows are insufficient. Each screen state uses the appropriate model alone."
+}

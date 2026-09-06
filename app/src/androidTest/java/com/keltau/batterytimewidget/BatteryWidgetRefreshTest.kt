@@ -21,6 +21,28 @@ class BatteryWidgetRefreshTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
 
+    @Test fun chargeOnlyWidgetStartsEarlyAndLaterBlendsBothModels() = withWidget { host, _ ->
+        val now = System.currentTimeMillis()
+        val charge = ScreenMode.entries.map { mode -> ChargeSummary(now / BatteryConfig.DAY_MS, mode, 10, 3,
+            180.0, 6000.0, 200000.0, 4_000_000.0 * 180, 4_000_000.0 * 4_000_000.0 * 180) }
+        val early = BatteryStore.Snapshot(emptyList(), emptyList(), charge)
+        BatteryStore.executor.submit {
+            BatteryStore.get(context).replace(early, now)
+            BatteryWidgetProvider.updateAll(context)
+        }.get(10, TimeUnit.SECONDS)
+        await { shows(host, early) }
+        val learned = early.copy(summaries = data(now, 600.0).summaries)
+        BatteryStore.executor.submit {
+            BatteryStore.get(context).replace(learned, now)
+            BatteryWidgetProvider.updateAll(context)
+        }.get(10, TimeUnit.SECONDS)
+        await { shows(host, learned) }
+        val estimate = HybridEstimator.estimate(50, ScreenMode.OFF, learned.summaries, charge, now)
+        assertTrue(estimate.chargeWeight > 0 && estimate.percentageWeight > 0)
+        assertTrue(estimate.seconds!! > estimate.percentage.seconds!!)
+        assertTrue(estimate.seconds < estimate.charge.time.seconds!!)
+    }
+
     @Test fun appRefreshUpdatesAPausedWidgetWithoutResizing() = withWidget { host, id ->
         val now = System.currentTimeMillis()
         val data = data(now, 600.0)
@@ -76,7 +98,7 @@ class BatteryWidgetRefreshTest {
         val now = System.currentTimeMillis()
         return listOf(ScreenMode.OFF to R.id.widget_off, ScreenMode.ON to R.id.widget_on).all { (mode, id) ->
             val expected = BatteryWidgetProvider.widgetDuration(context,
-                BatteryEstimator.estimate(percent, mode, data.summaries, now).seconds).toString()
+                HybridEstimator.estimate(percent, mode, data.summaries, data.chargeSummaries, now).seconds).toString()
             host.findViewById<TextView>(id)?.text?.toString() == expected
         }
     }

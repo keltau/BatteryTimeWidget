@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Battery Time</string>
-    <string name="intro">Two ways to reach 15%. Learned from your phone.</string>
+    <string name="intro">Time to 15%, learned from your phone for screen-off and screen-on use.</string>
     <string name="screen_off">Screen off</string>
     <string name="screen_on">Screen on</string>
     <string name="learning">Learning</string>
@@ -14,10 +14,16 @@
     <string name="battery_status">%1$d%% battery · time to 15%%</string>
     <string name="battery_unavailable">Battery level unavailable</string>
     <string name="target_reached">Battery is already at or below 15%.</string>
-    <string name="learning_detail" formatted="false">Learning needs at least six clean 1% drops for each screen mode. Leave learning on during everyday use; longer uninterrupted sessions help.</string>
-    <string name="provisional_detail">Early estimates. Some battery levels use your overall average until more history is available.</string>
+    <string name="learning_detail" formatted="false">Each screen mode learns separately. The charge model can start after three usable intervals, two minutes of observation and 0.1% equivalent consumption. The percentage model needs six clean 1% drops. Either can supply the widget while the other learns. Sensor resolution and everyday use determine how long this takes.</string>
+    <string name="charge_learning_detail">Using charge-counter estimates while the percentage model learns. The widget will blend both as soon as both are ready.</string>
+    <string name="combined_estimate">Widget estimate · reliability-weighted blend</string>
+    <string name="model_estimates">Percentage: %1$s\nCharge counter: %2$s\nBlend weights: %3$d%% percentage · %4$d%% charge</string>
+    <string name="counter_unavailable">No usable counter reading</string>
+    <string name="percentage_model">Percentage model</string>
+    <string name="charge_model">Charge-counter model (effective samples = equivalent percentage consumed)</string>
+    <string name="provisional_detail">Early estimates. Both models keep learning; their influence reflects recent evidence, coverage and variability. Sparse battery levels use the same screen mode’s average. Weights are evidence scores, not accuracy percentages.</string>
     <string name="estimate_explanation">Estimated time if the screen stays in that state. Screen-off audio intervals are excluded from learning.</string>
-    <string name="charging_detail">Estimates describe use after unplugging. Charging does not train the model.</string>
+    <string name="charging_detail">Estimates describe use after unplugging. Charging does not train either model.</string>
     <string name="collection_active">Learning is active</string>
     <string name="collection_paused">Learning is paused</string>
     <string name="collection_waiting">Learning is waiting to resume</string>
@@ -28,11 +34,11 @@
     <string name="add_widget">Add home screen widget</string>
     <string name="add_widget_manually">Touch and hold your home screen, choose Widgets, then Battery Time.</string>
     <string name="data_title">Your data</string>
-    <string name="data_detail">Stored on this phone. Export includes current estimates, eight weeks of daily summaries and seven days of raw intervals. Older data is deleted automatically. Import replaces the current history; use a backup from this phone for relevant estimates.</string>
+    <string name="data_detail">Stored on this phone. Export includes both models, their blend, eight weeks of daily summaries and seven days of raw intervals with available electrical readings. Older data is deleted automatically. Import replaces both histories; older backups restore percentage history only. Use a backup from this phone for relevant estimates.</string>
     <string name="export_data">Export data</string>
     <string name="import_data">Import data</string>
     <string name="import_title">Replace learning history?</string>
-    <string name="import_confirmation">Retained learning samples: %1$d. Raw intervals: %2$d. Import will replace all current history. Export first if you want to keep it. Expired records are discarded and estimates are recalculated.</string>
+    <string name="import_confirmation">Retained percentage samples: %1$d. Charge-counter samples: %2$d. Raw intervals: %3$d. Import replaces both histories, including clearing charge history when importing an older backup. Export first to keep existing data. Expired records are discarded and estimates are recalculated.</string>
     <string name="replace_data">Replace history</string>
     <string name="cancel">Cancel</string>
     <string name="export_complete">Data exported.</string>
@@ -41,9 +47,13 @@
     <string name="storage_error">Data could not be saved. Open the app to retry.</string>
     <string name="developer_page">Developer insights</string>
     <string name="back_overview">Back to overview</string>
-    <string name="dev_explanation" formatted="false">Daily means in 5% bands, with a 14-day half-life and eight-week limit. Sparse bands borrow the same screen mode’s mean. Coverage measures the remaining battery range with at least three effective samples on two days. Screen-off audio, mixed states, charging, jumps and uncertain intervals do not train either model. Audio detection depends on Android playback reports; remote or unreported playback cannot be guaranteed.</string>
-    <string name="dev_counts">Raw intervals: %1$d (7 days)\nAccepted samples: %2$d (56 days)\nDays with data: %3$d</string>
-    <string name="dev_mode">%1$s · samples: %2$d · days: %3$d · coverage: %4$d%%</string>
+    <string name="dev_explanation" formatted="false">Two parallel models in 5% bands, with a 14-day half-life and eight-week limit. Percentage samples measure full 1% drops; counter samples measure µAh consumed between events and close at state transitions. The counter model approximates full-charge scale as remaining µAh / system charge fraction; this is not a battery-health measurement. Rates are weighted by elapsed time, not event count. Blend scores use consumed amount, recency, coverage, days and variability, with an additional counter-calibration penalty. Scores are heuristic, not accuracy probabilities; both models share gauge data. Coverage requires three effective percentage points on two days. Charging, screen-off audio, unknown audio, counter resets and implausible windows are excluded. Voltage/current/temperature are diagnostic; no voltage-to-percentage curve is assumed. Cached voltage/temperature may predate a screen event. Audio reports and counter resolution depend on the device.</string>
+    <string name="dev_electrical">Charge: %1$s µAh\nCurrent: %2$s µA\nAverage current: %3$s µA\nVoltage: %4$s mV\nTemperature: %5$s °C</string>
+    <string name="dev_charge_mode">%1$s counter · samples: %2$d · days: %3$d\nAge-weighted seconds: %4$.0f · equivalent drain: %5$.3f%% · coverage: %6$d%%\nApproximate full-charge scale: %7$.0f mAh</string>
+    <string name="dev_weights">Evidence scores: percentage %1$.3f / counter %2$.3f\nBlend weights: percentage %3$.1f%% / counter %4$.1f%%</string>
+    <string name="dev_counts">Percentage raw intervals: %1$d (7 days)\nPercentage samples: %2$d (56 days)\nPercentage days: %3$d</string>
+    <string name="dev_mode">%1$s percentage · samples: %2$d · days: %3$d · coverage: %4$d%%</string>
+    <string name="dev_charge_counts">Counter raw intervals: %1$d (7 days)\nCounter samples: %2$d (56 days)</string>
     <string name="dev_live">Current screen: %1$s\nAudio active: %2$s\nAudio observation available: %3$s</string>
     <string name="band_header" formatted="false">Battery     Off min/%  On min/%   Effective off/on</string>
     <string name="recent_intervals">Latest 30 intervals</string>
@@ -56,6 +66,7 @@
     <string name="widget_paused">Learning paused · tap to start</string>
     <string name="widget_waiting">Waiting to resume · tap to open</string>
     <string name="widget_learning">Gathering clean discharge samples</string>
+    <string name="widget_charge_learning">Using charge data · percentage learning</string>
     <string name="widget_tap">Tap to open Battery Time</string>
     <string name="widget_updated">%1$s · updated %2$s</string>
     <string name="unplugged_projection">After unplugging</string>

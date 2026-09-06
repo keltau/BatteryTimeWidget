@@ -10,6 +10,11 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeUp
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.action.ViewActions.repeatedlyUntil
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
+import org.hamcrest.Matchers.allOf
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -30,7 +35,7 @@ class BatteryDataTest {
         ActivityScenario.launch(MainActivity::class.java).use {
             onView(withId(R.id.estimate_off)).check(matches(isDisplayed()))
             onView(withId(R.id.estimate_on)).check(matches(isDisplayed()))
-            onView(withId(R.id.main_root)).perform(swipeUp())
+            onView(withId(R.id.main_root)).perform(repeatedlyUntil(swipeUp(), hasDescendant(allOf(withId(R.id.open_dev), isCompletelyDisplayed())), 5))
             onView(withId(R.id.open_dev)).perform(click())
             onView(withId(R.id.close_dev)).check(matches(isDisplayed())).perform(click())
             onView(withId(R.id.estimate_off)).check(matches(isDisplayed()))
@@ -111,8 +116,7 @@ class BatteryDataTest {
                 assertFalse(BatteryMonitorService.running)
                 scenario.onActivity { BatteryMonitorService.start(it) }
                 awaitCondition { BatteryMonitorService.running }
-                onView(withId(R.id.main_root)).perform(swipeUp())
-                onView(withId(R.id.toggle_learning)).perform(click())
+                onView(withId(R.id.toggle_learning)).perform(scrollTo(), click())
                 awaitCondition { !BatteryMonitorService.running && !BatteryMonitorService.isEnabled(context) }
             }
             ActivityScenario.launch(MainActivity::class.java).use {

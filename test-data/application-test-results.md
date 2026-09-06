@@ -1,46 +1,62 @@
-# Application fixture checks
+# Import fixture application test results
 
-Run on 2026-09-05T07:47:08.771359Z using the Android emulator, actual import confirmation dialog, MainActivity.Model, SQLite store and overview views.
+Run: 2026-09-05T20:20:55.840547Z. Result: PASS.
 
-- PASS 01-realistic-six-weeks.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 01-realistic-six-weeks.json: app export round trip.
-- PASS 02-constant-rates.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 02-constant-rates.json: app export round trip.
-- PASS repeated constant-rate import: no duplicate samples.
-- PASS 03-recent-usage-change.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 03-recent-usage-change.json: app export round trip.
-- PASS 04-five-samples-per-mode.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 04-five-samples-per-mode.json: app export round trip.
-- PASS 05-screen-on-only.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 05-screen-on-only.json: app export round trip.
-- PASS 06-excluded-audio-and-other-intervals.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 06-excluded-audio-and-other-intervals.json: app export round trip.
-- PASS 07-raw-expired-summaries-retained.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 07-raw-expired-summaries-retained.json: app export round trip.
-- PASS 08-summary-retention-boundary.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 08-summary-retention-boundary.json: app export round trip.
-- PASS 09-entire-backup-expired.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 09-entire-backup-expired.json: app export round trip.
-- PASS 10-empty-history.json: confirmation, stored dataset and both overview estimates at 80%.
-- PASS 10-empty-history.json: app export round trip.
-- PASS cancelled replacement: existing history preserved.
-- PASS invalid-unsupported-version.json: application rejects file and preserves existing history.
-- PASS invalid-duplicate-summary.json: application rejects file and preserves existing history.
-- PASS invalid-overlapping-intervals.json: application rejects file and preserves existing history.
-- PASS actual device level 15%: both overview estimates are zero.
+Android 17, API 37, sdk_gphone16k_x86_64. Eight valid and two invalid import files.
 
-All 26 checks passed. The original database and real battery reporting were restored after the run. File access in this automated test uses app-owned file URIs; the system document picker is checked separately.
+- PASS Independent analytic agreement/recency oracles pass at every percentage 0–100 in both modes for both algorithms. Blends, coverage, learning thresholds and opposite reliability preferences pass.
+- PASS Both models enforce inclusive seven-day raw and 56-day summary boundaries; raw expiry retains learning, and all history expires later.
+- PASS 01-mature-agreement.json: confirmation and both stored histories match; component estimates, blend weights and live widget values pass at 15%, 50% and 80%.
+- PASS 01-mature-agreement.json: app export and re-import are lossless and idempotent.
+- PASS 01-mature-agreement.json: developer statistics show correct separate model counts.
+- PASS 02-opposing-usage-changes.json: confirmation and both stored histories match; component estimates, blend weights and live widget values pass at 15%, 50% and 80%.
+- PASS 02-opposing-usage-changes.json: app export and re-import are lossless and idempotent.
+- PASS 02-opposing-usage-changes.json: developer statistics show correct separate model counts.
+- PASS 03-realistic-bands-and-exclusions.json: confirmation and both stored histories match; component estimates, blend weights and live widget values pass at 15%, 50% and 80%.
+- PASS 03-realistic-bands-and-exclusions.json: app export and re-import are lossless and idempotent.
+- PASS 03-realistic-bands-and-exclusions.json: developer statistics show correct separate model counts.
+- PASS 04-mixed-learning-thresholds.json: confirmation and both stored histories match; component estimates, blend weights and live widget values pass at 15%, 50% and 80%.
+- PASS 04-mixed-learning-thresholds.json: app export and re-import are lossless and idempotent.
+- PASS 04-mixed-learning-thresholds.json: developer statistics show correct separate model counts.
+- PASS 05-legacy-percentage-only.json: confirmation and both stored histories match; component estimates, blend weights and live widget values pass at 15%, 50% and 80%.
+- PASS 05-legacy-percentage-only.json: app export and re-import are lossless and idempotent.
+- PASS 05-legacy-percentage-only.json: developer statistics show correct separate model counts.
+- PASS 06-retention-boundaries.json: confirmation and both stored histories match; component estimates, blend weights and live widget values pass at 15%, 50% and 80%.
+- PASS 06-retention-boundaries.json: app export and re-import are lossless and idempotent.
+- PASS 06-retention-boundaries.json: developer statistics show correct separate model counts.
+- PASS 07-fully-expired-to-empty.json: confirmation and both stored histories match; component estimates, blend weights and live widget values pass at 15%, 50% and 80%.
+- PASS 07-fully-expired-to-empty.json: app export and re-import are lossless and idempotent.
+- PASS 07-fully-expired-to-empty.json: developer statistics show correct separate model counts.
+- PASS 08-reliability-cross-over.json: confirmation and both stored histories match; component estimates, blend weights and live widget values pass at 15%, 50% and 80%.
+- PASS 08-reliability-cross-over.json: app export and re-import are lossless and idempotent.
+- PASS 08-reliability-cross-over.json: developer statistics show correct separate model counts.
+- PASS Cancelled replacement preserves both histories.
+- PASS 09-invalid-version.json: app rejects import and preserves both histories.
+- PASS 10-invalid-counter-reset.json: app rejects import and preserves both histories.
+- PASS Transient malformed variant rejected without data loss: duplicate percentage summary.
+- PASS Transient malformed variant rejected without data loss: duplicate counter summary.
+- PASS Transient malformed variant rejected without data loss: duplicate percentage raw.
+- PASS Transient malformed variant rejected without data loss: duplicate counter raw.
+- PASS Transient malformed variant rejected without data loss: percentage overlap.
+- PASS Transient malformed variant rejected without data loss: counter overlap.
+- PASS Transient malformed variant rejected without data loss: fractional integer.
+- PASS Transient malformed variant rejected without data loss: negative percentage variance.
+- PASS Transient malformed variant rejected without data loss: negative counter variance.
+- PASS Transient malformed variant rejected without data loss: negative counter calibration.
+- PASS Transient malformed variant rejected without data loss: impossible calibration variance.
+- PASS Transient malformed variant rejected without data loss: missing percentage summaries.
+- PASS Transient malformed variant rejected without data loss: missing counter summaries.
+- PASS Transient malformed variant rejected without data loss: unsupported counter algorithm.
+- PASS Transient malformed variant rejected without data loss: future export.
+- PASS Imported cached predictions are ignored; both algorithms and widget values are recomputed.
+- PASS Removing excluded raw rows preserves both model times, weights and sample counts at every battery level; raw diagnostics are not replayed as learning.
 
-## Manual application checks
+46 grouped checks completed. Data and battery simulation restored; temporary widget removed.
 
-Verified on the same Android 17 emulator on 2026-09-05:
+Scope: real import confirmation, MainActivity.Model, SQLite, developer/overview views, app export and AppWidgetHost updates. File access uses app-owned URIs; this run does not automate the system document picker. Synthetic histories test implementation behavior, not physical battery accuracy.
 
-- PASS imported 02-constant-rates.json from Downloads using the system document picker and confirmed replacement.
-- PASS overview at 80%: screen off 10 h 50 min, screen on 2 h 10 min, matching the analytic reference.
-- PASS installed 2×1 widget: only the two labels and estimates (10h 50m and 2h 10m), both fully visible without clipping.
+## Additional regression verification
 
-The manual checks left the constant-rate fixture loaded in the test emulator. Real battery reporting was restored afterward.
+The same revision also passed all 37 JVM model tests and the other 26 Android tests on 2026-09-05. Together with this catalog runner, all 27 Android tests passed. The remaining tests cover event tracking, stale/missing/reset counters, audio and screen transitions, service restart/pause behavior, database migration and rollback, malformed/oversized imports, widget layout and refresh behavior, and the hybrid overview.
 
-## Build checks
-
-The debug app and instrumentation APKs built successfully. All 19 unit tests passed. Android lint reported no errors and three existing compatibility warnings for API 31 widget attributes.
+The saved screenshots were inspected for readable component estimates, weights and combined times. The fixture manifest contains exactly eight valid and two invalid import files; all references resolve. The previous generated datasets and reports were replaced. The temporary headless emulator was closed after verification without saving disk changes.

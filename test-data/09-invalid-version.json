@@ -1,0 +1,504 @@
+{
+  "format": "battery-time-widget",
+  "version": 99,
+  "exportedAtMs": 1788639536805,
+  "batteryPercent": 80,
+  "targetPercent": 15,
+  "bandWidth": 5,
+  "rawRetentionDays": 7,
+  "summaryRetentionDays": 56,
+  "halfLifeDays": 14,
+  "chargeModel": "counter-rate-v1",
+  "chargeDailySummaries": [],
+  "chargeRawIntervals": [],
+  "estimates": {
+    "OFF": {
+      "secondsToTarget": null,
+      "percentageSeconds": null,
+      "chargeSeconds": null,
+      "percentageWeight": 0,
+      "chargeWeight": 0,
+      "percentageReliability": 0,
+      "chargeReliability": 0,
+      "chargeCoverage": 0,
+      "chargeSamples": 0,
+      "chargeDays": 0,
+      "chargeEquivalentPercent": 0,
+      "chargeObservedSeconds": 0,
+      "chargeCapacityUah": null,
+      "chargeBands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        }
+      ],
+      "coverage": 0,
+      "samples": 0,
+      "days": 0,
+      "bands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        }
+      ]
+    },
+    "ON": {
+      "secondsToTarget": null,
+      "percentageSeconds": null,
+      "chargeSeconds": null,
+      "percentageWeight": 0,
+      "chargeWeight": 0,
+      "percentageReliability": 0,
+      "chargeReliability": 0,
+      "chargeCoverage": 0,
+      "chargeSamples": 0,
+      "chargeDays": 0,
+      "chargeEquivalentPercent": 0,
+      "chargeObservedSeconds": 0,
+      "chargeCapacityUah": null,
+      "chargeBands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 0,
+          "effectivePercent": 0,
+          "days": 0
+        }
+      ],
+      "coverage": 0,
+      "samples": 0,
+      "days": 0,
+      "bands": [
+        {
+          "band": 0,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 1,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 2,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 3,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 4,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 5,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 6,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 7,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 8,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 9,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 10,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 11,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 12,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 13,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 14,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 15,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 16,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 17,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 18,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        },
+        {
+          "band": 19,
+          "secondsPerPercent": 0,
+          "effectiveSamples": 0
+        }
+      ]
+    }
+  },
+  "dailySummaries": [],
+  "rawIntervals": [],
+  "syntheticTestData": true,
+  "testScenario": "Both algorithms agree: 600 seconds per percent off, 120 on; mature coverage and a genuine blend."
+}

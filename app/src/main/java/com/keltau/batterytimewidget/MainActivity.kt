@@ -32,6 +32,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     private lateinit var model: Model
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             if (pending != null) {
                 importDialog = MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.import_title)
-                    .setMessage(getString(R.string.import_confirmation, pending.summaries.sumOf { it.count }, pending.raw.size))
+                    .setMessage(getString(R.string.import_confirmation, pending.summaries.sumOf { it.count }, pending.chargeSummaries.sumOf { it.count }, pending.raw.size + pending.chargeRaw.size))
                     .setNegativeButton(R.string.cancel) { _, _ -> model.pendingImport.value = null }
                     .setPositiveButton(R.string.replace_data) { _, _ -> model.applyImport() }
                     .setOnCancelListener { model.pendingImport.value = null }
@@ -161,16 +162,27 @@ class MainActivity : AppCompatActivity() {
         val now = System.currentTimeMillis()
         val battery = registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         val percent = BatteryMonitorService.percent(battery)
-        val off = BatteryEstimator.estimate(percent, ScreenMode.OFF, data.summaries, now)
-        val on = BatteryEstimator.estimate(percent, ScreenMode.ON, data.summaries, now)
+        val offHybrid = HybridEstimator.estimate(percent, ScreenMode.OFF, data.summaries, data.chargeSummaries, now)
+        val onHybrid = HybridEstimator.estimate(percent, ScreenMode.ON, data.summaries, data.chargeSummaries, now)
+        val off = offHybrid.percentage
+        val on = onHybrid.percentage
         text(R.id.battery_status, if (percent < 0) getString(R.string.battery_unavailable) else getString(R.string.battery_status, percent))
-        text(R.id.estimate_off, BatteryWidgetProvider.duration(this, off.seconds))
-        text(R.id.estimate_on, BatteryWidgetProvider.duration(this, on.seconds))
+        text(R.id.estimate_off, BatteryWidgetProvider.duration(this, offHybrid.seconds))
+        text(R.id.estimate_on, BatteryWidgetProvider.duration(this, onHybrid.seconds))
+        fun modelDetail(estimate: HybridEstimate): String = getString(R.string.model_estimates,
+            BatteryWidgetProvider.duration(this, estimate.percentage.seconds),
+            if (estimate.charge.time.seconds == null && BatteryMonitorService.latest?.let { it.chargeUah == null } == true)
+                getString(R.string.counter_unavailable) else BatteryWidgetProvider.duration(this, estimate.charge.time.seconds),
+            (estimate.percentageWeight * 100).roundToInt(),
+            if (estimate.seconds == null) 0 else 100 - (estimate.percentageWeight * 100).roundToInt())
+        text(R.id.models_off, modelDetail(offHybrid))
+        text(R.id.models_on, modelDetail(onHybrid))
         val detail = when {
             percent in 0..BatteryConfig.TARGET_PERCENT -> R.string.target_reached
             battery != null && !BatteryMonitorService.isDischarging(battery) -> R.string.charging_detail
-            off.seconds == null || on.seconds == null -> R.string.learning_detail
-            !off.established || !on.established -> R.string.provisional_detail
+            offHybrid.seconds == null || onHybrid.seconds == null -> R.string.learning_detail
+            off.seconds == null || on.seconds == null -> R.string.charge_learning_detail
+            !offHybrid.established || !onHybrid.established -> R.string.provisional_detail
             else -> R.string.estimate_explanation
         }
         text(R.id.estimate_detail, getString(detail))
@@ -188,25 +200,47 @@ class MainActivity : AppCompatActivity() {
             appendLine(getString(R.string.dev_counts, data.raw.size, data.summaries.sumOf { it.count }, data.summaries.map { it.day }.distinct().size))
             appendLine(getString(R.string.dev_mode, getString(R.string.screen_off), off.sampleCount, off.days, (off.coverage * 100).toInt()))
             appendLine(getString(R.string.dev_mode, getString(R.string.screen_on), on.sampleCount, on.days, (on.coverage * 100).toInt()))
+            appendLine(getString(R.string.dev_charge_counts, data.chargeRaw.size, data.chargeSummaries.sumOf { it.count }))
             appendLine()
             appendLine(getString(R.string.dev_live, current?.screen?.name ?: "—", current?.audioActive?.toString() ?: "—", current?.audioKnown?.toString() ?: "—"))
+            appendLine(getString(R.string.dev_electrical, current?.chargeUah?.toString() ?: "—", current?.currentUa?.toString() ?: "—",
+                current?.averageCurrentUa?.toString() ?: "—", current?.voltageMv?.toString() ?: "—", current?.temperatureDeciC?.let { (it / 10.0).toString() } ?: "—"))
             appendLine()
-            excluded.forEach { (reason, count) -> appendLine("${reason?.name ?: "ACCEPTED"}: $count") }
+            listOf(ScreenMode.OFF to offHybrid, ScreenMode.ON to onHybrid).forEach { (mode, hybrid) ->
+                val charge = hybrid.charge
+                appendLine(getString(R.string.dev_charge_mode, mode.name, charge.time.sampleCount, charge.time.days, charge.observedSeconds,
+                    charge.equivalentPercent, (charge.time.coverage * 100).toInt(), (charge.capacityUah ?: 0.0) / 1000))
+                appendLine(getString(R.string.dev_weights, hybrid.percentage.reliability, charge.time.reliability,
+                    hybrid.percentageWeight * 100, hybrid.chargeWeight * 100))
+            }
+            appendLine()
+            excluded.forEach { (reason, count) -> appendLine("Percentage ${reason?.name ?: "ACCEPTED"}: $count") }
+            data.chargeRaw.groupingBy { it.exclusion }.eachCount().forEach { (reason, count) -> appendLine("Counter ${reason?.name ?: "ACCEPTED"}: $count") }
         }
         text(R.id.dev_summary, details)
         text(R.id.dev_bands, buildString {
-            appendLine(getString(R.string.band_header))
-            off.bands.zip(on.bands).forEach { (a, b) ->
-                appendLine(String.format(Locale.getDefault(), "%3d–%3d  %8s  %8s  %5.1f / %5.1f", a.band * 5, (a.band + 1) * 5,
-                    if (off.sampleCount == 0) "—" else String.format(Locale.getDefault(), "%.1f", a.secondsPerPercent / 60),
-                    if (on.sampleCount == 0) "—" else String.format(Locale.getDefault(), "%.1f", b.secondsPerPercent / 60),
-                    a.effectiveSamples, b.effectiveSamples))
+            fun table(off: TimeEstimate, on: TimeEstimate) {
+                appendLine(getString(R.string.band_header))
+                off.bands.zip(on.bands).forEach { (a, b) ->
+                    appendLine(String.format(Locale.getDefault(), "%3d–%3d  %8s  %8s  %5.1f / %5.1f", a.band * 5, (a.band + 1) * 5,
+                        if (off.sampleCount == 0) "—" else String.format(Locale.getDefault(), "%.1f", a.secondsPerPercent / 60),
+                        if (on.sampleCount == 0) "—" else String.format(Locale.getDefault(), "%.1f", b.secondsPerPercent / 60),
+                        a.effectiveSamples, b.effectiveSamples))
+                }
             }
+            appendLine(getString(R.string.percentage_model))
+            table(off, on)
+            appendLine()
+            appendLine(getString(R.string.charge_model))
+            table(offHybrid.charge.time, onHybrid.charge.time)
         })
         val date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
-        text(R.id.dev_raw, data.raw.takeLast(30).asReversed().joinToString("\n\n") {
-            "${date.format(Date(it.endMs))} · ${it.startPercent}% → ${it.endPercent}%\n${it.screen.name} · ${BatteryWidgetProvider.duration(this, it.seconds.toLong())} · ${it.exclusion?.name ?: "ACCEPTED"}"
-        }.ifEmpty { getString(R.string.no_intervals) })
+        val rawDescriptions = data.raw.takeLast(30).map {
+            it.endMs to "Percentage · ${date.format(Date(it.endMs))} · ${it.startPercent}% → ${it.endPercent}%\n${it.screen.name} · ${BatteryWidgetProvider.duration(this, it.seconds.toLong())} · ${it.exclusion?.name ?: "ACCEPTED"}"
+        } + data.chargeRaw.takeLast(30).map {
+            it.end.timeMs to "Counter · ${date.format(Date(it.end.timeMs))} · ${it.start.chargeUah ?: "—"} → ${it.end.chargeUah ?: "—"} µAh\n${it.start.screen.name} · ${BatteryWidgetProvider.duration(this, it.seconds.toLong())} · ${it.exclusion?.name ?: "ACCEPTED"}\n${it.end.currentUa ?: "—"} µA · ${it.end.voltageMv ?: "—"} mV · ${it.end.temperatureDeciC?.let { t -> t / 10.0 } ?: "—"} °C"
+        }
+        text(R.id.dev_raw, rawDescriptions.sortedByDescending { it.first }.take(30).joinToString("\n\n") { it.second }.ifEmpty { getString(R.string.no_intervals) })
     }
 
     private fun text(id: Int, value: String) {
