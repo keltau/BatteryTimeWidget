@@ -4,8 +4,11 @@
     android:minHeight="180dp"
     android:minResizeWidth="110dp"
     android:minResizeHeight="56dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="2"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/battery_widget"
+    android:previewLayout="@layout/battery_widget"
     android:description="@string/widget_description"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />
