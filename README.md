@@ -8,14 +8,14 @@ The widget can shrink to two columns by one row on supported launcher grids. Com
 
 Learning is off until you enable it. The app saves your choice locally; automatic recovery runs only while learning is enabled and does not open the overview screen.
 
-| Event | Behavior |
-| --- | --- |
-| Android interrupts the app process | Android can restart the enabled collector as a sticky foreground service. Recovery timing is controlled by the system. |
-| Phone restarts | Enabled learning resumes after boot and the first unlock, without opening the app. |
-| App is updated | Enabled learning resumes after the update. |
-| App is opened while the collector is absent | Enabled learning resumes automatically. |
-| **Pause learning** is selected in the app or notification | Learning stops and stays paused through reboots, updates and reopening. Select **Start learning** to enable it again. |
-| App is force-stopped in Android settings | Collection stays stopped until you reopen the app; it then resumes if learning was enabled. |
+| Event                                                     | Behavior                                                                                                               |
+|-----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| Android interrupts the app process                        | Android can restart the enabled collector as a sticky foreground service. Recovery timing is controlled by the system. |
+| Phone restarts                                            | Enabled learning resumes after boot and the first unlock, without opening the app.                                     |
+| App is updated                                            | Enabled learning resumes after the update.                                                                             |
+| App is opened while the collector is absent               | Enabled learning resumes automatically.                                                                                |
+| **Pause learning** is selected in the app or notification | Learning stops and stays paused through reboots, updates and reopening. Select **Start learning** to enable it again.  |
+| App is force-stopped in Android settings                  | Collection stays stopped until you reopen the app; it then resumes if learning was enabled.                            |
 
 Stored history survives interruptions. Both collectors start fresh measurement windows after recovery, so downtime cannot train either model. Learning resumes after unlock because its settings and history remain in credential-protected storage. Restricted battery settings or manufacturer background policies can delay boot delivery or service recovery.
 
@@ -97,12 +97,12 @@ The existing compile/target SDK 37, minimum SDK 26, AGP 9.4 and Gradle 9.6 setup
 
 Permissions have specific purposes:
 
-| Permission | Purpose |
-| --- | --- |
-| `FOREGROUND_SERVICE` | Keep the user-started event observer eligible to run in the background. |
-| `FOREGROUND_SERVICE_SPECIAL_USE` | Android 14+ type for the battery-learning observer; its subtype is declared on the service. Play distribution requires review of this use case. |
-| `POST_NOTIFICATIONS` | Request visibility of the learning notification on Android 13+. Denial does not prevent service operation; pause remains available in the app/system task manager. |
-| `RECEIVE_BOOT_COMPLETED` | Resume previously enabled learning after reboot and unlock, and allow the daily cleanup job to persist across reboots. |
+| Permission                       | Purpose                                                                                                                                                            |
+|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `FOREGROUND_SERVICE`             | Keep the user-started event observer eligible to run in the background.                                                                                            |
+| `FOREGROUND_SERVICE_SPECIAL_USE` | Android 14+ type for the battery-learning observer; its subtype is declared on the service. Play distribution requires review of this use case.                    |
+| `POST_NOTIFICATIONS`             | Request visibility of the learning notification on Android 13+. Denial does not prevent service operation; pause remains available in the app/system task manager. |
+| `RECEIVE_BOOT_COMPLETED`         | Resume previously enabled learning after reboot and unlock, and allow the daily cleanup job to persist across reboots.                                             |
 
 ## Limits
 

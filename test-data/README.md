@@ -2,7 +2,7 @@
 
 **Eleven import files total: nine valid scenarios and two rejection examples.** All histories are synthetic. Files 01–10 and their results were generated 2026-09-05T20:18:56.805Z and are preserved. File 11 is an additional realistic daily-usage sample with its own generation date, expectations and test results.
 
-For the new sample, use [11-realistic-daily-usage.json](11-realistic-daily-usage.json). Its [guide](realistic-usage-guide.md) describes the six-week simulation and expected values; its [separate test report](realistic-usage-test-results.md) covers only file 11. The original ten tests were not rerun when adding it.
+For the new sample, use [11-realistic-daily-usage.json](11-realistic-daily-usage.json). Its [guide](realistic-usage-guide.md) describes the six-week simulation and expected values; its [separate test report](realistic-usage-test-results.md) covers only file 11.
 
 ## Use
 
@@ -10,16 +10,16 @@ Export your own history first, pause learning, then select one numbered JSON fil
 
 For the original files below, at 80% on their generation date, P = percentage, C = counter, B = blended/widget. Detailed seconds, scores, weights, coverage, days and counts at 0/15/16/25/50/80/100% are in expected-results.json (a report, not an import file). File 11 has its own [expected-results report](realistic-usage-expected-results.json).
 
-| File | Screen off P / C / B | Screen on P / C / B |
-| --- | --- | --- |
-| [01-mature-agreement.json](01-mature-agreement.json) | 10 h 50 min / 10 h 50 min / 10 h 50 min | 2 h 10 min / 2 h 10 min / 2 h 10 min |
-| [02-opposing-usage-changes.json](02-opposing-usage-changes.json) | 7 h 13 min / 9 h 2 min / 8 h 7 min | 3 h 15 min / 3 h 37 min / 3 h 26 min |
+| File                                                                             | Screen off P / C / B                    | Screen on P / C / B                  |
+|----------------------------------------------------------------------------------|-----------------------------------------|--------------------------------------|
+| [01-mature-agreement.json](01-mature-agreement.json)                             | 10 h 50 min / 10 h 50 min / 10 h 50 min | 2 h 10 min / 2 h 10 min / 2 h 10 min |
+| [02-opposing-usage-changes.json](02-opposing-usage-changes.json)                 | 7 h 13 min / 9 h 2 min / 8 h 7 min      | 3 h 15 min / 3 h 37 min / 3 h 26 min |
 | [03-realistic-bands-and-exclusions.json](03-realistic-bands-and-exclusions.json) | 11 h 47 min / 11 h 47 min / 11 h 47 min | 2 h 34 min / 2 h 34 min / 2 h 34 min |
-| [04-mixed-learning-thresholds.json](04-mixed-learning-thresholds.json) | Learning / 21 h 38 min / 21 h 38 min | 2 h 10 min / Learning / 2 h 10 min |
-| [05-legacy-percentage-only.json](05-legacy-percentage-only.json) | 10 h 50 min / Learning / 10 h 50 min | 2 h 10 min / Learning / 2 h 10 min |
-| [06-retention-boundaries.json](06-retention-boundaries.json) | 10 h 50 min / 10 h 50 min / 10 h 50 min | 2 h 10 min / 2 h 10 min / 2 h 10 min |
-| [07-fully-expired-to-empty.json](07-fully-expired-to-empty.json) | Learning / Learning / Learning | Learning / Learning / Learning |
-| [08-reliability-cross-over.json](08-reliability-cross-over.json) | 6 h 38 min / 6 h 30 min / 6 h 33 min | 2 h 10 min / 2 h 13 min / 2 h 11 min |
+| [04-mixed-learning-thresholds.json](04-mixed-learning-thresholds.json)           | Learning / 21 h 38 min / 21 h 38 min    | 2 h 10 min / Learning / 2 h 10 min   |
+| [05-legacy-percentage-only.json](05-legacy-percentage-only.json)                 | 10 h 50 min / Learning / 10 h 50 min    | 2 h 10 min / Learning / 2 h 10 min   |
+| [06-retention-boundaries.json](06-retention-boundaries.json)                     | 10 h 50 min / 10 h 50 min / 10 h 50 min | 2 h 10 min / 2 h 10 min / 2 h 10 min |
+| [07-fully-expired-to-empty.json](07-fully-expired-to-empty.json)                 | Learning / Learning / Learning          | Learning / Learning / Learning       |
+| [08-reliability-cross-over.json](08-reliability-cross-over.json)                 | 6 h 38 min / 6 h 30 min / 6 h 33 min    | 2 h 10 min / 2 h 13 min / 2 h 11 min |
 
 - **01-mature-agreement:** Both algorithms agree: 600 seconds per percent off, 120 on; mature coverage and a genuine blend.
 - **02-opposing-usage-changes:** Recent usage is weighted twice as strongly as the preceding fortnight. Percentage rates are 400/180 seconds per percent; counter rates are 500/200. Both estimates must contribute.
@@ -47,7 +47,7 @@ Fifteen additional malformed variants are tested through the app without permane
 
 To regenerate and test **only file 11**, follow [Run only this sample](realistic-usage-guide.md#run-only-this-sample). It uses RealisticUsageImportTest and a separate output folder, preserving files 01–10 and both original reports.
 
-The following commands are for the **original ten files only**. ImportFixturesTest#importFixturesThroughApplication generates those files with the production serializer, validates them, imports all ten files in the app and writes application-test-results.md. Use an emulator with learning paused, then copy its import-fixtures folder. These tests were not rerun when adding file 11.
+The following commands are for the **original ten files only**. ImportFixturesTest#importFixturesThroughApplication generates those files with the production serializer, validates them, imports all ten files in the app and writes application-test-results.md. Use an emulator with learning paused, then copy its import-fixtures folder.
 
 ```powershell
 .\gradlew.bat assembleDebug assembleDebugAndroidTest
