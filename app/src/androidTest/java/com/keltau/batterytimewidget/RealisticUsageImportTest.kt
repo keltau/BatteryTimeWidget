@@ -212,6 +212,7 @@ class RealisticUsageImportTest {
                 }
                 instrumentation.waitForIdleSync()
                 onView(withId(R.id.open_dev)).perform(click())
+                idle()
                 onView(withId(R.id.dev_panel)).check(matches(isDisplayed()))
                 scenario.onActivity { activity ->
                     val text = activity.findViewById<TextView>(R.id.dev_summary).text.toString()

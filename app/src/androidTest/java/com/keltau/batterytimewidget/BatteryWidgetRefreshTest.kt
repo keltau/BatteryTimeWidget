@@ -87,6 +87,29 @@ class BatteryWidgetRefreshTest {
         await { model.busy.value == false && model.snapshot.value?.summaries == second.summaries && shows(host, second) }
     }
 
+    @Test fun overviewLoadsFullDiagnosticsOnlyWhenRequested() = withWidget { host, _ ->
+        val now = System.currentTimeMillis()
+        val interval = DischargeInterval(now - 600_000, now, 51, 50, 600.0, ScreenMode.OFF, null)
+        val start = BatteryReading(now - 60_000, 0, 50, true, ScreenMode.ON, false, chargeUah = 2_000_000)
+        val charge = ChargeInterval(start, start.copy(timeMs = now, elapsedMs = 60_000, chargeUah = 1_999_000), null)
+        val data = data(now, 600.0).copy(raw = listOf(interval), chargeSummaries = listOf(charge.summary()), chargeRaw = listOf(charge))
+        BatteryStore.executor.submit { BatteryStore.get(context).replace(data, now) }.get(10, TimeUnit.SECONDS)
+        lateinit var model: MainActivity.Model
+        instrumentation.runOnMainSync {
+            model = MainActivity.Model(context.applicationContext as Application)
+            model.refresh()
+        }
+        val overview = data.copy(raw = emptyList(), chargeRaw = emptyList())
+        await { model.busy.value == false && model.snapshot.value == overview && shows(host, data) }
+        assertFalse(model.rawLoaded)
+        instrumentation.runOnMainSync { model.setDiagnosticsVisible(true) }
+        await { model.busy.value == false && model.rawLoaded && model.snapshot.value == data }
+        instrumentation.runOnMainSync { model.setDiagnosticsVisible(false) }
+        await { model.busy.value == false && !model.rawLoaded && model.snapshot.value == overview }
+        val stored = BatteryStore.executor.submit<BatteryStore.Snapshot> { BatteryStore.get(context).snapshot(now) }.get(10, TimeUnit.SECONDS)
+        assertEquals(data, stored)
+    }
+
     private fun data(now: Long, seconds: Double) = BatteryStore.Snapshot(
         listOf(ScreenMode.OFF, ScreenMode.ON).map { mode ->
             val rate = if (mode == ScreenMode.OFF) seconds else seconds / 3

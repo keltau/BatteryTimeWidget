@@ -201,7 +201,7 @@ class ImportFixturesTest {
                     assertEquals(data, onStore { BatteryStore.get(context).snapshot(System.currentTimeMillis()) })
                     checks += "${file.name}: app export and re-import are lossless and idempotent."
                     scenario.onActivity { activity ->
-                        assertEquals(data, model.snapshot.value)
+                        assertEquals(data.copy(raw = emptyList(), chargeRaw = emptyList()), model.snapshot.value)
                         activity.findViewById<ScrollView>(R.id.main_root).apply {
                             isSmoothScrollingEnabled = false
                             fullScroll(View.FOCUS_DOWN)
@@ -209,6 +209,7 @@ class ImportFixturesTest {
                     }
                     instrumentation.waitForIdleSync()
                     onView(withId(R.id.open_dev)).perform(click())
+                    idle()
                     onView(withId(R.id.dev_panel)).check(matches(isDisplayed()))
                     scenario.onActivity { activity ->
                         val text = activity.findViewById<TextView>(R.id.dev_summary).text.toString()

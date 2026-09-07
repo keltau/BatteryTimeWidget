@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.text.Layout
@@ -16,6 +17,7 @@ import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
 import android.util.SizeF
 import android.util.Log
+import android.util.LruCache
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -32,25 +34,27 @@ class BatteryWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
         val pending = goAsync()
         BatteryStore.executor.execute {
-            try {
-                runCatching { updateAll(context) }.onFailure { Log.e("BatteryWidget", "Widget refresh failed", it) }
-                BatteryMaintenanceService.schedule(context)
-            } finally {
-                pending.finish()
-            }
+            runCatching { updateAll(context) }.onFailure { Log.e("BatteryWidget", "Widget refresh failed", it) }
+            BatteryMaintenanceService.schedule(context) { pending.finish() }
         }
     }
 
     companion object {
-        fun updateAll(context: Context) {
+        private data class TimeSizeKey(val size: SizeF, val configuration: Configuration,
+            val off: String, val on: String, val offLearning: Boolean, val onLearning: Boolean,
+            val status: String, val updated: String)
+        private val timeSizes = LruCache<TimeSizeKey, Int>(128)
+        private val durationUnits = Regex("[^\\p{Nd}]+")
+
+        fun updateAll(context: Context, snapshot: BatteryStore.Snapshot? = null) {
             val manager = AppWidgetManager.getInstance(context)
             val ids = manager.getAppWidgetIds(ComponentName(context, BatteryWidgetProvider::class.java))
             if (ids.isEmpty()) return
             val now = System.currentTimeMillis()
             val battery = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
             val percent = BatteryMonitorService.percent(battery)
-            val summaries = BatteryStore.get(context).summaries(now)
-            val chargeSummaries = BatteryStore.get(context).chargeSummaries(now)
+            val summaries = snapshot?.summaries ?: BatteryStore.get(context).summaries(now)
+            val chargeSummaries = snapshot?.chargeSummaries ?: BatteryStore.get(context).chargeSummaries(now)
             val off = HybridEstimator.estimate(percent, ScreenMode.OFF, summaries, chargeSummaries, now)
             val on = HybridEstimator.estimate(percent, ScreenMode.ON, summaries, chargeSummaries, now)
             val failure = BatteryMonitorService.failure
@@ -92,6 +96,8 @@ class BatteryWidgetProvider : AppWidgetProvider() {
         fun createViews(context: Context, size: SizeF, offSeconds: Long?, onSeconds: Long?,
                         status: String, updated: String): RemoteViews {
             val compact = size.width < 180 || size.height < 180
+            val off = widgetDuration(context, offSeconds)
+            val on = widgetDuration(context, onSeconds)
             val density = context.resources.displayMetrics.density
             fun dp(value: Int) = (value * density + 0.5f).toInt()
             val views = RemoteViews(context.packageName, R.layout.battery_widget).apply {
@@ -105,8 +111,8 @@ class BatteryWidgetProvider : AppWidgetProvider() {
                 val spacing = dp(if (compact) 0 else 4)
                 setViewPadding(R.id.widget_root, horizontal, vertical, horizontal, vertical)
                 setViewPadding(R.id.widget_estimates, 0, spacing, 0, spacing)
-                setTextViewText(R.id.widget_off, widgetDuration(context, offSeconds))
-                setTextViewText(R.id.widget_on, widgetDuration(context, onSeconds))
+                setTextViewText(R.id.widget_off, off)
+                setTextViewText(R.id.widget_on, on)
                 setContentDescription(R.id.widget_off, duration(context, offSeconds))
                 setContentDescription(R.id.widget_on, duration(context, onSeconds))
                 setTextViewText(R.id.widget_status, status)
@@ -114,11 +120,17 @@ class BatteryWidgetProvider : AppWidgetProvider() {
                 setOnClickPendingIntent(R.id.widget_root, PendingIntent.getActivity(context, 2,
                     Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT))
             }
-            setSharedTimeSize(context, views, size)
+            val key = TimeSizeKey(size, Configuration(context.resources.configuration),
+                off.toString(), on.toString(), offSeconds == null, onSeconds == null,
+                if (compact) "" else status, if (compact) "" else updated)
+            val sharedSize = timeSizes.get(key) ?: measureSharedTimeSize(context, views, size).also { timeSizes.put(key, it) }
+            for (id in listOf(R.id.widget_off, R.id.widget_on)) {
+                views.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_SP, sharedSize.toFloat())
+            }
             return views
         }
 
-        private fun setSharedTimeSize(context: Context, views: RemoteViews, size: SizeF) {
+        private fun measureSharedTimeSize(context: Context, views: RemoteViews, size: SizeF): Int {
             // Measure the same layout the launcher receives, including spans and font scaling.
             // One shared size prevents a shorter estimate from growing larger than the other.
             val root = views.apply(context, FrameLayout(context))
@@ -126,7 +138,7 @@ class BatteryWidgetProvider : AppWidgetProvider() {
             val density = context.resources.displayMetrics.density
             val width = (size.width * density).toInt()
             val height = (size.height * density).toInt()
-            val sharedSize = (56 downTo 8).firstOrNull { candidate ->
+            return (56 downTo 8).firstOrNull { candidate ->
                 times.forEach { it.setTextSize(TypedValue.COMPLEX_UNIT_SP, candidate.toFloat()) }
                 root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
@@ -134,7 +146,6 @@ class BatteryWidgetProvider : AppWidgetProvider() {
                     Layout.getDesiredWidth(it.text, it.paint) <= it.measuredWidth - it.totalPaddingLeft - it.totalPaddingRight
                 }
             } ?: 8
-            times.forEach { views.setTextViewTextSize(it.id, TypedValue.COMPLEX_UNIT_SP, sharedSize.toFloat()) }
         }
 
         fun widgetDuration(context: Context, seconds: Long?): CharSequence {
@@ -143,7 +154,7 @@ class BatteryWidgetProvider : AppWidgetProvider() {
                 text.setSpan(RelativeSizeSpan(0.6f), 0, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else {
                 // Smaller units and spaces leave more room for the important digits.
-                Regex("[^\\p{Nd}]+").findAll(text).forEach { match ->
+                durationUnits.findAll(text).forEach { match ->
                     text.setSpan(RelativeSizeSpan(0.7f), match.range.first, match.range.last + 1,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }

@@ -2,6 +2,7 @@ package com.keltau.batterytimewidget
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.core.database.sqlite.transaction
@@ -77,14 +78,17 @@ class BatteryStore internal constructor(context: Context, name: String = "batter
                 }
             }
             prune(db, nowMs)
+            if (interval != null) trimRaw(db, "raw", BatteryConfig.MAX_RAW_ROWS)
+            if (chargeInterval != null) trimRaw(db, "charge_raw", BatteryConfig.MAX_CHARGE_RAW_ROWS)
         }
     }
 
-    fun snapshot(nowMs: Long): Snapshot {
+    fun snapshot(nowMs: Long, includeRaw: Boolean = true): Snapshot {
         val db = writableDatabase
         return db.transaction {
             prune(db, nowMs)
             val summaries = summaries(nowMs)
+            if (!includeRaw) return@transaction Snapshot(summaries, emptyList(), chargeSummaries(nowMs))
             val raw = mutableListOf<DischargeInterval>()
             db.rawQuery("SELECT start_ms, end_ms, start_percent, end_percent, seconds, screen, exclusion FROM raw ORDER BY end_ms, id", null).use { cursor ->
                 while (cursor.moveToNext()) {
@@ -123,11 +127,21 @@ class BatteryStore internal constructor(context: Context, name: String = "batter
             }
             snapshot.chargeRaw.forEach { insertChargeRaw(db, it) }
             prune(db, nowMs)
+            trimRaw(db, "raw", BatteryConfig.MAX_RAW_ROWS)
+            trimRaw(db, "charge_raw", BatteryConfig.MAX_CHARGE_RAW_ROWS)
         }
         generation++
     }
 
-    fun prune(nowMs: Long) = prune(writableDatabase, nowMs)
+    fun prune(nowMs: Long) {
+        val db = writableDatabase
+        db.transaction { prune(db, nowMs) }
+    }
+
+    fun hasHistory(): Boolean = readableDatabase.rawQuery(
+        "SELECT 1 FROM daily UNION ALL SELECT 1 FROM charge_daily UNION ALL SELECT 1 FROM raw UNION ALL SELECT 1 FROM charge_raw LIMIT 1",
+        null,
+    ).use { it.moveToFirst() }
 
     fun summaries(nowMs: Long): List<DailySummary> {
         val today = Math.floorDiv(nowMs, BatteryConfig.DAY_MS)
@@ -148,10 +162,16 @@ class BatteryStore internal constructor(context: Context, name: String = "batter
         db.delete("raw", "end_ms < ?", arrayOf((nowMs - BatteryConfig.RAW_DAYS * BatteryConfig.DAY_MS).toString()))
         val firstDay = Math.floorDiv(nowMs, BatteryConfig.DAY_MS) - BatteryConfig.HISTORY_DAYS + 1
         db.delete("daily", "day < ?", arrayOf(firstDay.toString()))
-        db.execSQL("DELETE FROM raw WHERE id IN (SELECT id FROM raw ORDER BY end_ms DESC, id DESC LIMIT -1 OFFSET ${BatteryConfig.MAX_RAW_ROWS})")
         db.delete("charge_raw", "end_ms < ?", arrayOf((nowMs - BatteryConfig.RAW_DAYS * BatteryConfig.DAY_MS).toString()))
         db.delete("charge_daily", "day < ?", arrayOf(firstDay.toString()))
-        db.execSQL("DELETE FROM charge_raw WHERE id IN (SELECT id FROM charge_raw ORDER BY end_ms DESC, id DESC LIMIT -1 OFFSET ${BatteryConfig.MAX_CHARGE_RAW_ROWS})")
+    }
+
+    private fun trimRaw(db: SQLiteDatabase, table: String, limit: Int) {
+        // Only inserts can exceed a row cap. Reads and age cleanup need no history scan.
+        val overflow = DatabaseUtils.queryNumEntries(db, table) - limit
+        if (overflow > 0) {
+            db.execSQL("DELETE FROM $table WHERE id IN (SELECT id FROM $table ORDER BY end_ms, id LIMIT $overflow)")
+        }
     }
 
     fun chargeSummaries(nowMs: Long): List<ChargeSummary> {

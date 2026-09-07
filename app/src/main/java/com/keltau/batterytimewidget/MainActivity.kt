@@ -32,6 +32,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.Executor
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
@@ -155,6 +159,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.overview_panel).visibility = if (show) View.GONE else View.VISIBLE
         findViewById<View>(R.id.dev_panel).visibility = if (show) View.VISIBLE else View.GONE
         findViewById<View>(R.id.main_root).scrollTo(0, 0)
+        model.setDiagnosticsVisible(show)
         if (show) model.snapshot.value?.let { render(it) }
     }
 
@@ -193,7 +198,7 @@ class MainActivity : AppCompatActivity() {
             else -> R.string.collection_paused
         }))
         text(R.id.toggle_learning, getString(if (enabled) R.string.pause_learning else R.string.start_learning))
-        if (!showingDev) return
+        if (!showingDev || !model.rawLoaded) return
         val current = BatteryMonitorService.latest
         val excluded = data.raw.groupingBy { it.exclusion }.eachCount()
         val details = buildString {
@@ -254,32 +259,59 @@ class MainActivity : AppCompatActivity() {
         val pendingImport = MutableLiveData<BatteryStore.Snapshot?>()
         private val handler = Handler(Looper.getMainLooper())
         private var activeTasks = 0
+        private var refreshInFlight = false
         private var refreshPending = false
+        @Volatile private var diagnosticsVisible = false
+        var rawLoaded = false
+            private set
         private val context: Context get() = getApplication<Application>()
 
+        fun setDiagnosticsVisible(visible: Boolean) {
+            if (diagnosticsVisible == visible) return
+            diagnosticsVisible = visible
+            refresh()
+        }
+
         fun refresh() {
-            if (busy.value == true) {
+            if (refreshInFlight) {
                 refreshPending = true
                 return
             }
-            runTask { refreshSnapshot() }
+            refreshInFlight = true
+            runTask(onComplete = {
+                refreshInFlight = false
+                if (refreshPending) {
+                    refreshPending = false
+                    refresh()
+                }
+            }) { refreshSnapshot() }
         }
 
         private fun refreshSnapshot() {
-            snapshot.postValue(BatteryStore.get(context).snapshot(System.currentTimeMillis()))
+            val includeRaw = diagnosticsVisible
+            val data = BatteryStore.get(context).snapshot(System.currentTimeMillis(), includeRaw)
+            handler.post {
+                rawLoaded = includeRaw
+                snapshot.value = data
+            }
             // Opening the app or refreshing while learning is paused must also update widgets.
-            BatteryWidgetProvider.updateAll(context)
+            BatteryWidgetProvider.updateAll(context, data)
         }
 
-        fun export(uri: Uri) = runTask {
-            val now = System.currentTimeMillis()
-            val data = BatteryStore.get(context).snapshot(now)
-            val percent = BatteryMonitorService.percent(context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED)))
+        fun export(uri: Uri) = runTask(transferExecutor) {
+            // Serialize the snapshot with collection, then release the database queue before
+            // encoding JSON or waiting for a potentially remote document provider.
+            val (data, percent, now) = BatteryStore.executor.submit<Triple<BatteryStore.Snapshot, Int, Long>> {
+                val now = System.currentTimeMillis()
+                val data = BatteryStore.get(context).snapshot(now)
+                val percent = BatteryMonitorService.percent(context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED)))
+                Triple(data, percent, now)
+            }.get()
             requireNotNull(context.contentResolver.openOutputStream(uri, "wt")).use { DataTransfer.write(it, data, percent, now) }
             message.postValue(context.getString(R.string.export_complete))
         }
 
-        fun prepareImport(uri: Uri) = runTask {
+        fun prepareImport(uri: Uri) = runTask(transferExecutor) {
             val data = requireNotNull(context.contentResolver.openInputStream(uri)).use { DataTransfer.read(it, System.currentTimeMillis()) }
             pendingImport.postValue(data)
         }
@@ -289,25 +321,28 @@ class MainActivity : AppCompatActivity() {
             pendingImport.value = null
             runTask {
                 BatteryStore.get(context).replace(data, System.currentTimeMillis())
+                BatteryMaintenanceService.schedule(context)
                 refreshSnapshot()
                 message.postValue(context.getString(R.string.import_complete))
             }
         }
 
-        private fun runTask(block: () -> Unit) {
+        private fun runTask(executor: Executor = BatteryStore.executor, onComplete: () -> Unit = {}, block: () -> Unit) {
             activeTasks++
             busy.value = true
-            BatteryStore.executor.execute {
+            executor.execute {
                 runCatching(block).onFailure { message.postValue(context.getString(R.string.data_error, it.message?.take(160) ?: it.javaClass.simpleName)) }
                 handler.post {
                     activeTasks--
                     busy.value = activeTasks > 0
-                    if (activeTasks == 0 && refreshPending) {
-                        refreshPending = false
-                        refresh()
-                    }
+                    onComplete()
                 }
             }
+        }
+
+        companion object {
+            // The transfer worker retires after 30 seconds without document operations.
+            private val transferExecutor = ThreadPoolExecutor(0, 1, 30, TimeUnit.SECONDS, LinkedBlockingQueue())
         }
     }
 }

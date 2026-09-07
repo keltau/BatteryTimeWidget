@@ -168,7 +168,8 @@ class BatteryMonitorService : Service() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != Intent.ACTION_BOOT_COMPLETED && intent.action != Intent.ACTION_MY_PACKAGE_REPLACED) return
             resumeIfEnabled(context)
-            BatteryMaintenanceService.schedule(context)
+            val pending = goAsync()
+            BatteryMaintenanceService.schedule(context) { pending?.finish() }
         }
     }
 
@@ -213,6 +214,7 @@ class BatteryMonitorService : Service() {
             val application = context.applicationContext
             BatteryStore.executor.execute {
                 runCatching { BatteryWidgetProvider.updateAll(application) }
+                BatteryMaintenanceService.schedule(application)
                 application.sendBroadcast(Intent(ACTION_CHANGED).setPackage(application.packageName))
             }
         }
