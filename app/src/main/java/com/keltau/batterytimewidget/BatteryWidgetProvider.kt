@@ -115,12 +115,7 @@ class BatteryWidgetProvider : AppWidgetProvider() {
                     Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT))
             }
             setSharedTimeSize(context, views, size)
-            // Launchers reapply updates to the existing view tree. Replace the content so
-            // TextViews cannot retain the previous duration's line breaks or font metrics.
-            return RemoteViews(context.packageName, R.layout.battery_widget_host).apply {
-                removeAllViews(R.id.widget_content)
-                addView(R.id.widget_content, views)
-            }
+            return views
         }
 
         private fun setSharedTimeSize(context: Context, views: RemoteViews, size: SizeF) {

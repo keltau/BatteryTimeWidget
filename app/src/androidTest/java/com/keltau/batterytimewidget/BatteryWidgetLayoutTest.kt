@@ -24,6 +24,34 @@ import java.util.concurrent.Executors
 class BatteryWidgetLayoutTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
 
+    @Test fun restoringBackgroundAfterLaunchAnimationKeepsBothDurationParts() {
+        instrumentation.runOnMainSync {
+            val context = instrumentation.targetContext
+            for (size in listOf(SizeF(110f, 56f), SizeF(180f, 80f), SizeF(180f, 180f), SizeF(320f, 180f))) {
+                val root = render(context, size, 23 * 3600L + 59 * 60L, 12 * 86400L + 23 * 3600L)
+                val content = root.findViewById<View>(R.id.widget_root)
+                val padding = listOf(content.paddingLeft, content.paddingTop, content.paddingRight, content.paddingBottom)
+                val background = content.background
+                repeat(3) {
+                    // The launcher temporarily moves the background to its animation overlay.
+                    content.background = null
+                    layout(context, size, root)
+                    content.background = background
+                    // No provider refresh or widget resize: return directly to the home screen.
+                    layout(context, size, root)
+                    for (id in listOf(R.id.widget_off, R.id.widget_on)) {
+                        val time = root.findViewById<TextView>(id)
+                        assertEquals("Duration wrapped after animation at $size: ${time.text}", 1, time.layout.lineCount)
+                        assertTrue("Duration clipped after animation at $size", time.layout.getLineWidth(0) <= time.width + 1)
+                        assertTrue("Duration clipped vertically at $size", time.layout.height <= time.height)
+                    }
+                    assertEquals("Animation changed widget padding at $size", padding,
+                        listOf(content.paddingLeft, content.paddingTop, content.paddingRight, content.paddingBottom))
+                }
+            }
+        }
+    }
+
     @Test fun widgetCanBeBuiltOnTheStorageExecutor() {
         val context = instrumentation.targetContext.applicationContext
         BatteryStore.executor.submit<RemoteViews> {
