@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream
 import kotlin.math.abs
 import kotlin.math.roundToLong
 
-/** Deterministic synthetic histories; no real user data enters exported fixtures. */
 internal class ImportFixtureCatalog(val now: Long) {
     private val dayMs = BatteryConfig.DAY_MS
     data class Case(val name: String, val description: String, val exportedAt: Long,
@@ -30,8 +29,6 @@ internal class ImportFixtureCatalog(val now: Long) {
         )
     }
 
-    // Additional scenario: generated/tested independently so the original ten files
-    // and their recorded run can be preserved exactly.
     fun realisticUsage(history: RealisticUsageHistory.History = RealisticUsageHistory.generate(now)) = Case(
         "11-realistic-daily-usage",
         "Six weeks of a synthetic 4,500 mAh phone: irregular screen sessions, overnight idle, music, evening charging, partial top-ups, variable load/voltage/temperature and brief sensor outages. Both collectors process the same battery events and learn independently.",
@@ -66,7 +63,7 @@ internal class ImportFixtureCatalog(val now: Long) {
                     rows += DischargeInterval(cursor, end, percent, percent - 1, seconds, mode, if (percent == 100) Exclusion.WARMUP else null)
                     cursor = end
                 }
-                cursor += 1_800_000 // Recharge / unobserved time is not learned.
+                cursor += 1_800_000
             }
             check(cursor < startOfDay + dayMs) { "Synthetic cycles overlap days" }
         }
@@ -122,7 +119,6 @@ internal class ImportFixtureCatalog(val now: Long) {
                 cursor = row.endMs
             }
         }
-        // A separate recent gap holds all diagnostic reasons, without duplicating learning.
         var cursor = now - 3_600_000
         Exclusion.entries.forEach { reason ->
             raw += DischargeInterval(cursor, cursor + 30_000, 51, 50, 30.0, ScreenMode.OFF, reason)
@@ -168,7 +164,6 @@ internal class ImportFixtureCatalog(val now: Long) {
             val end = now - 7 * dayMs + offset
             DischargeInterval(end - 120_000, end, 51, 50, 120.0, ScreenMode.ON, null)
         }
-        // Summaries can outlive raw diagnostics; retaining only these raw rows isolates the cutoff.
         val data = snapshot(history + boundary, (history + boundary).map(::counter), exportedAt)
         return data.copy(raw = boundary, chargeRaw = boundary.map(::counter))
     }
@@ -178,7 +173,6 @@ internal class ImportFixtureCatalog(val now: Long) {
             val data = restored.getValue(cases[index].name)
             return HybridEstimator.estimate(percent, mode, data.summaries, data.chargeSummaries, now)
         }
-        // Independent analytic oracles for all percentages: no production prediction is reused.
         for (percent in 0..100) for (mode in ScreenMode.entries) {
             val points = (percent - 15).coerceAtLeast(0)
             val fixed = points * if (mode == ScreenMode.OFF) 600L else 120L

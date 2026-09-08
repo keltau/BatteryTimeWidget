@@ -4,10 +4,6 @@ import java.util.Random
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-/** Synthetic 4,500 mAh phone, with continuous charge accounting across six weeks.
- * UTC hours are a reproducible local-day stand-in, not a recorded person's routine.
- * Both collectors see the SAME events; neither model's intervals are fabricated.
- */
 internal object RealisticUsageHistory {
     data class History(val percentage: List<DischargeInterval>, val charge: List<ChargeInterval>)
 
@@ -27,8 +23,6 @@ internal object RealisticUsageHistory {
         var nextBroadcast = 0
         var last: BatteryReading? = null
 
-        // One-minute integration; broadcasts arrive every 2–6 minutes and at every
-        // integer gauge change, screen/audio transition, plug event or sensor outage.
         for (minute in 0 until 42 * 1440) {
             if (minute > 0) remaining = (remaining + previousCurrent / 60.0).coerceAtMost(capacity)
             check(remaining > capacity * 0.05) { "Simulated phone would have shut down" }
@@ -52,8 +46,6 @@ internal object RealisticUsageHistory {
             val loadMa = (if (on) 540.0 + (local / 17 % 5) * 55 else if (audio) 155.0 else if (local < 420) 22.0 else 38.0) *
                 (0.88 + day % 7 * 0.04) + random.nextInt(13) - 6
             val current = if (plugged) {
-                // Net charge current tapers near full; connected at full draws no
-                // additional battery charge. Occasional lunch/emergency top-ups are partial.
                 minOf((1800.0 * ((1 - fraction) / 0.18).coerceIn(0.08, 1.0)) * 1000,
                     (capacity - remaining) * 60).roundToInt()
             } else (-loadMa * 1000).roundToInt()

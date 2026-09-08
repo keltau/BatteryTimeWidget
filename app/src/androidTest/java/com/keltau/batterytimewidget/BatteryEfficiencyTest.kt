@@ -25,7 +25,6 @@ class BatteryEfficiencyTest {
         val overview = full.copy(raw = emptyList(), chargeRaw = emptyList())
         assertEquals(overview, store.snapshot(now, includeRaw = false))
 
-        // A summaries-only read must not even decode the raw JSON column.
         store.writableDatabase.execSQL("UPDATE charge_raw SET data = 'not JSON'")
         assertEquals(overview, store.snapshot(now, includeRaw = false))
         assertEquals(overview, store.snapshot(now + 1, includeRaw = false))
@@ -59,7 +58,6 @@ class BatteryEfficiencyTest {
         assertCaps()
         assertEquals(chargeRaw[3].end.timeMs, oldest("charge_raw"))
 
-        // Old inserts must be discarded instead of displacing newer retained history.
         store.record(percentage(now - 60_000), charge(now - 60_000), now)
         store.record(null, null, now)
         store.prune(now)

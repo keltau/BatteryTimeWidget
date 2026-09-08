@@ -131,8 +131,6 @@ class BatteryWidgetProvider : AppWidgetProvider() {
         }
 
         private fun measureSharedTimeSize(context: Context, views: RemoteViews, size: SizeF): Int {
-            // Measure the same layout the launcher receives, including spans and font scaling.
-            // One shared size prevents a shorter estimate from growing larger than the other.
             val root = views.apply(context, FrameLayout(context))
             val times = listOf(root.findViewById<TextView>(R.id.widget_off), root.findViewById<TextView>(R.id.widget_on))
             val density = context.resources.displayMetrics.density
@@ -153,7 +151,6 @@ class BatteryWidgetProvider : AppWidgetProvider() {
             if (seconds == null) {
                 text.setSpan(RelativeSizeSpan(0.6f), 0, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else {
-                // Smaller units and spaces leave more room for the important digits.
                 durationUnits.findAll(text).forEach { match ->
                     text.setSpan(RelativeSizeSpan(0.7f), match.range.first, match.range.last + 1,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

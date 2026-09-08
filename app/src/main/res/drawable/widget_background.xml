@@ -2,5 +2,4 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/widget_background" />
     <corners android:radius="24dp" />
-    <!-- Padding belongs to the layout. Launch animations detach and restore this drawable. -->
 </shape>

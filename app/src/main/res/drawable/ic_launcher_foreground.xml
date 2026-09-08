@@ -4,7 +4,6 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Keep the complete mark inside the central 66dp adaptive icon safe circle. -->
     <path
         android:fillColor="#4DE0B1"
         android:fillType="evenOdd"

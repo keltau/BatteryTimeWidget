@@ -13,7 +13,7 @@ object ChargeConfig {
     const val MIN_LEARNING_SECONDS = 120.0
     const val MIN_LEARNING_PERCENT = 0.1
     const val MIN_DROP_UAH = 10.0
-    const val MIN_DROP_FRACTION = 0.0001 // 0.01%: accumulate tiny changes within one state.
+    const val MIN_DROP_FRACTION = 0.0001
     const val MAX_DROP_PERCENT = 1.5
 }
 
@@ -25,8 +25,6 @@ enum class ChargeExclusion {
 data class ChargeInterval(val start: BatteryReading, val end: BatteryReading, val exclusion: ChargeExclusion?) {
     val seconds: Double get() = ((end.elapsedMs - start.elapsedMs) / 1000.0).coerceAtLeast(0.0)
     val chargeUah: Double get() = (start.chargeUah ?: 0).toDouble() - (end.chargeUah ?: 0).toDouble()
-    // Android does not universally expose full-charge capacity. This is an approximate
-    // scale from the gauge's remaining charge / state of charge, not a battery health reading.
     val capacityUah: Double get() = if (start.percent > 0 && end.percent > 0)
         ((start.chargeUah ?: 0) * 100.0 / start.percent + (end.chargeUah ?: 0) * 100.0 / end.percent) / 2 else 0.0
     val band: Int get() = (end.percent / BatteryConfig.BAND_WIDTH).coerceIn(0, 19)
@@ -36,7 +34,6 @@ data class ChargeInterval(val start: BatteryReading, val end: BatteryReading, va
     )
 }
 
-/** Each state transition closes the preceding state's window; no mixed-state window is learned. */
 class ChargeTracker {
     private var anchor: BatteryReading? = null
     private var last: BatteryReading? = null
@@ -68,15 +65,11 @@ class ChargeTracker {
             interval.seconds > BatteryConfig.MAX_INTERVAL_SECONDS -> ChargeExclusion.DURATION
             interval.seconds < BatteryConfig.MIN_INTERVAL_SECONDS -> ChargeExclusion.TOO_SMALL
             interval.chargeUah < max(ChargeConfig.MIN_DROP_UAH, interval.capacityUah * ChargeConfig.MIN_DROP_FRACTION) -> ChargeExclusion.TOO_SMALL
-            // Maximum average draw of 5C also catches short, implausible gauge jumps.
             interval.chargeUah / interval.seconds * 3600 > interval.capacityUah * 5 -> ChargeExclusion.COUNTER_RESET
             awaitingCounterBoundary -> ChargeExclusion.WARMUP
             else -> null
         }
-        // Duplicate events and coarse counters must not reset elapsed time or create evidence.
         if (reason == ChargeExclusion.TOO_SMALL && !changed) return null
-        // If a transition finds the same cached counter value, the next hardware step
-        // may span both states. Discard that step before learning the new state.
         awaitingCounterBoundary = when {
             changed && reading.chargeUah == previous.chargeUah -> true
             reading.chargeUah != start.chargeUah -> false
@@ -141,7 +134,6 @@ object ChargeEstimator {
         }
         val rateCv = if (rate > 0) max(0.0, data.sumOf { it.squaredRateSeconds * weight(it) } / seconds / (rate * rate) - 1) else 0.0
         val capacityCv = if (capacity > 0) max(0.0, data.sumOf { it.squaredCapacitySeconds * weight(it) } / seconds / (capacity * capacity) - 1) else 0.0
-        // A fixed penalty acknowledges the approximate charge-to-percentage calibration.
         val consistency = 1 / (1.15 + rateCv + 4 * capacityCv)
         val reliability = if (time == null || seconds == 0.0) 0.0 else evidenceReliability(
             equivalent, 4.0, coverage, days, consistency, seconds / data.sumOf { it.seconds })

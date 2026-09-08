@@ -4,7 +4,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.math.abs
 
-/** Version 2 charge records. Cached estimates never participate in restored learning. */
 object ChargeTransfer {
     fun json(row: ChargeSummary) = JSONObject().apply {
         put("day", row.day); put("screen", row.screen.name); put("band", row.band); put("count", row.count)

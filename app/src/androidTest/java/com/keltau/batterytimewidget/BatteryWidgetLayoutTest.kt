@@ -33,11 +33,9 @@ class BatteryWidgetLayoutTest {
                 val padding = listOf(content.paddingLeft, content.paddingTop, content.paddingRight, content.paddingBottom)
                 val background = content.background
                 repeat(3) {
-                    // The launcher temporarily moves the background to its animation overlay.
                     content.background = null
                     layout(context, size, root)
                     content.background = background
-                    // No provider refresh or widget resize: return directly to the home screen.
                     layout(context, size, root)
                     for (id in listOf(R.id.widget_off, R.id.widget_on)) {
                         val time = root.findViewById<TextView>(id)
@@ -148,7 +146,6 @@ class BatteryWidgetLayoutTest {
                         assertEquals(scenario, 1, time.layout.lineCount)
                         assertTrue("Width: $scenario", time.layout.getLineWidth(0) <= time.width + 1)
                         assertTrue("Height: $scenario", time.layout.height <= time.height)
-                        // No weighted empty area above or below the line of text.
                         assertTrue("Extra space: $scenario", time.height - time.layout.height <= 1)
                         val column = time.parent as ViewGroup
                         val label = column.getChildAt(0)

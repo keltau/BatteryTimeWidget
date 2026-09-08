@@ -77,7 +77,6 @@ class BatteryWidgetRefreshTest {
                 model = MainActivity.Model(context.applicationContext as Application)
                 model.refresh()
             }
-            // A new sample arrives after the first snapshot read, while the UI is still busy.
             BatteryStore.executor.execute { BatteryStore.get(context).replace(second, now) }
             instrumentation.runOnMainSync { model.refresh() }
         } finally {
@@ -151,7 +150,6 @@ class BatteryWidgetRefreshTest {
                 view = host.createView(context, id, manager.getAppWidgetInfo(id))
             }
             await { view.findViewById<TextView>(R.id.widget_off) != null }
-            // Finish initial provider callbacks before testing app-driven updates.
             instrumentation.waitForIdleSync()
             BatteryStore.executor.submit {}.get(10, TimeUnit.SECONDS)
             block(view, id)

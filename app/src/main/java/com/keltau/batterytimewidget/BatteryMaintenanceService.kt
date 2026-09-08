@@ -19,7 +19,6 @@ class BatteryMaintenanceService : JobService() {
 
         fun cancel() {
             cancelled.set(true)
-            // Let an in-flight SQLite transaction finish atomically; skip remaining work.
             future?.cancel(false)
         }
     }
@@ -76,8 +75,6 @@ class BatteryMaintenanceService : JobService() {
 
         private fun reconcileSchedule(context: Context) {
             val scheduler = context.getSystemService(JobScheduler::class.java)
-            // Pausing still retains cleanup while history exists. Once history is gone,
-            // there is no reason to keep starting the process every day.
             if (!BatteryMonitorService.isEnabled(context) && !BatteryStore.get(context).hasHistory()) {
                 scheduler.cancel(JOB_ID)
                 return

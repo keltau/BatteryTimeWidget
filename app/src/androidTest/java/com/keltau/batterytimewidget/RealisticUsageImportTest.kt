@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-/** Only fixture 11: never generates, imports, deletes or reruns fixtures 01–10. */
 class RealisticUsageImportTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
@@ -122,8 +121,6 @@ class RealisticUsageImportTest {
             }
             val at80 = estimate(data, 80, mode)
             assertNotEquals(at80.percentage.seconds, at80.charge.time.seconds)
-            // Broad physical bounds from the simulated capacity and workload, not
-            // golden values copied from the estimator under test.
             val range = if (mode == ScreenMode.OFF) (36 * 3600L)..(240 * 3600L) else (3 * 3600L)..(8 * 3600L)
             assertTrue(at80.percentage.seconds!! in range)
             assertTrue(at80.charge.time.seconds!! in range)

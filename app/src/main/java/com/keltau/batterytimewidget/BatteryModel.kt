@@ -182,7 +182,6 @@ object BatteryEstimator {
     }
 }
 
-// Heuristic evidence scores, not probabilities or independent statistical confidence.
 internal fun evidenceReliability(evidence: Double, prior: Double, coverage: Double, days: Int, consistency: Double, freshness: Double): Double =
     (evidence / (evidence + prior) * (0.35 + 0.65 * coverage) *
         (0.6 + 0.4 * (days / 7.0).coerceAtMost(1.0)) * consistency * freshness).coerceIn(0.0, 1.0)

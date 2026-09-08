@@ -29,7 +29,6 @@ import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
-/** Regenerates, validates and imports the complete catalog in one reproducible run. */
 class ImportFixturesTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
@@ -51,7 +50,6 @@ class ImportFixturesTest {
 
     private fun generate(): List<File> {
         check(output.isDirectory || output.mkdirs())
-        // This app-owned folder contains generated fixtures/results only, never user exports.
         output.listFiles().orEmpty().forEach { check(it.isFile && it.delete()) }
         val restored = linkedMapOf<String, BatteryStore.Snapshot>()
         val files = catalog.cases.map { case ->

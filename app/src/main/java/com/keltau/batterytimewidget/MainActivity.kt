@@ -294,13 +294,10 @@ class MainActivity : AppCompatActivity() {
                 rawLoaded = includeRaw
                 snapshot.value = data
             }
-            // Opening the app or refreshing while learning is paused must also update widgets.
             BatteryWidgetProvider.updateAll(context, data)
         }
 
         fun export(uri: Uri) = runTask(transferExecutor) {
-            // Serialize the snapshot with collection, then release the database queue before
-            // encoding JSON or waiting for a potentially remote document provider.
             val (data, percent, now) = BatteryStore.executor.submit<Triple<BatteryStore.Snapshot, Int, Long>> {
                 val now = System.currentTimeMillis()
                 val data = BatteryStore.get(context).snapshot(now)
@@ -341,7 +338,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         companion object {
-            // The transfer worker retires after 30 seconds without document operations.
             private val transferExecutor = ThreadPoolExecutor(0, 1, 30, TimeUnit.SECONDS, LinkedBlockingQueue())
         }
     }

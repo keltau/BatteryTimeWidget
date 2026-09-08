@@ -167,7 +167,6 @@ class BatteryStore internal constructor(context: Context, name: String = "batter
     }
 
     private fun trimRaw(db: SQLiteDatabase, table: String, limit: Int) {
-        // Only inserts can exceed a row cap. Reads and age cleanup need no history scan.
         val overflow = DatabaseUtils.queryNumEntries(db, table) - limit
         if (overflow > 0) {
             db.execSQL("DELETE FROM $table WHERE id IN (SELECT id FROM $table ORDER BY end_ms, id LIMIT $overflow)")
